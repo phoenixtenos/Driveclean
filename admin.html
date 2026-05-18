@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drive Clean — Espace Admin Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan: #00C8FF;
+    --magenta: #FF2D78;
+    --dark: #0D0D1A;
+    --darker: #07070F;
+    --mid: #1A1A2E;
+    --card: #12122A;
+    --white: #FFFFFF;
+    --gray: #8888AA;
+    --yellow: #FFD600;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--darker);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .admin-box {
+    background: var(--card);
+    border: 2px dashed var(--magenta);
+    padding: 30px;
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(255, 45, 120, 0.1);
+  }
+
+  .admin-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .admin-title span { color: var(--magenta); }
+
+  .field-wrap { display: flex; flex-direction: column; gap: 8px; text-align: left; margin-bottom: 20px; }
+  .field-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); font-weight: bold; }
+  .field-input {
+    background: var(--dark);
+    border: 2px solid rgba(255,255,255,0.1);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 14px;
+    outline: none;
+    text-align: center;
+  }
+
+  .btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .btn-primary { background: var(--cyan); color: var(--dark); width: 100%; }
+  .btn-block { background: var(--magenta); color: var(--white); margin-top: 20px; width: 100%; font-size: 20px; }
+  .btn-block:hover { background: #FF005A; box-shadow: 0 0 15px rgba(255, 45, 120, 0.4); }
+  .btn-shortcut {
+    background: var(--mid);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--white);
+    font-size: 12px;
+    padding: 6px 12px;
+    font-family: 'Rajdhani', sans-serif;
+    letter-spacing: 1px;
+    cursor: pointer;
+  }
+  .btn-shortcut:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  #admin-controls-zone {
+    display: none;
+    width: 100%;
+    max-width: 850px;
+    background: var(--card);
+    border: 2px solid var(--cyan);
+    padding: 30px;
+    box-shadow: 0 0 30px rgba(0, 200, 255, 0.15);
+  }
+
+  .controls-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 20px;
+  }
+  @media (max-width: 768px) { .controls-layout { grid-template-columns: 1fr; } }
+
+  .calendar-wrap { background: var(--dark); border: 2px solid rgba(255,255,255,0.05); padding: 20px; }
+  .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+  .cal-nav { background: var(--mid); color: var(--cyan); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
+  .cal-nav:hover { background: var(--cyan); color: var(--dark); }
+  .cal-month { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .cal-day-name { text-align: center; font-size: 11px; color: var(--gray); padding-bottom: 6px; font-weight: bold; }
+  .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+  .cal-day.empty { cursor: default; }
+  .cal-day.past { color: rgba(255,255,255,0.15); cursor: default; }
+  .cal-day.selected { background: var(--cyan); color: var(--dark); font-weight: 700; box-shadow: 0 0 8px var(--cyan); }
+
+  .shortcuts-bar { display: flex; gap: 8px; margin-bottom: 12px; }
+  .time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .time-slot {
+    background: var(--dark);
+    border: 2px solid rgba(255,255,255,0.05);
+    padding: 12px 4px;
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+  }
+  .time-slot:hover { border-color: var(--magenta); color: var(--magenta); }
+  .time-slot.selected { background: var(--magenta); border-color: var(--magenta); color: var(--white); box-shadow: 0 0 8px var(--magenta); }
+</style>
+</head>
+<body>
+
+  <div class="admin-box" id="admin-auth-zone">
+    <div class="admin-title">🛠️ DRIVE CLEAN — <span>PANEL ADMIN</span></div>
+    <div class="field-wrap">
+      <label class="field-label">Code Secret Admin</label>
+      <input class="field-input" type="password" id="admin-pass-input" placeholder="Entrez votre mot de passe">
+    </div>
+    <button class="btn btn-primary" onclick="verifierMotDePasseAdmin()">Connexion 🔑</button>
+    <div id="admin-status"></div>
+  </div>
+
+  <div id="admin-controls-zone">
+    <div class="admin-title" style="margin-bottom: 10px; justify-content: flex-start;">⚙️ SELECTIONNEUR <span>PRO</span></div>
+    <p style="color: var(--gray); font-size: 14px; margin-bottom: 20px;">Sélectionne tes dates et tes heures précises. Seules les heures cochées seront bloquées.</p>
+    
+    <div class="controls-layout">
+      
+      <div>
+        <div class="field-label" style="margin-bottom: 8px;">1. Choisir les dates</div>
+        <div class="calendar-wrap">
+          <div class="cal-header">
+            <div class="cal-nav" onclick="prevMonth()">‹</div>
+            <div class="cal-month" id="cal-month-label"></div>
+            <div class="cal-nav" onclick="nextMonth()">›</div>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+        </div>
+        <div style="margin-top: 8px; font-size: 12px; color: var(--cyan);" id="dates-selectionnees-label">0 date sélectionnée</div>
+      </div>
+
+      <div>
+        <div class="field-label" style="margin-bottom: 8px;">2. Choisir les heures précises</div>
+        <div class="shortcuts-bar">
+          <button class="btn-shortcut" onclick="selectionnerToutConge()">Tout cocher (Fermer la journée)</button>
+          <button class="btn-shortcut" onclick="selectionnerToutesHeures(false)">Tout effacer</button>
+        </div>
+        <div class="time-grid" id="time-grid"></div>
+        <div style="margin-top: 8px; font-size: 12px; color: var(--magenta);" id="heures-selectionnees-label">0 heure sélectionnée</div>
+      </div>
+
+    </div>
+
+    <button class="btn btn-block" onclick="executerBlocageMassif()">Verrouiller la sélection exacte 🔒</button>
+    <div id="admin-status-controls" style="margin-top: 15px; text-align: center; font-weight: 600;"></div>
+  </div>
+
+<script>
+  const SUPABASE_URL = 'https://ezhljxnrlinvawdbjioz.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6aGxqeG5ybGludmF3ZGJqaW96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MDMwMDUsImV4cCI6MjA5NDM3OTAwNX0.tFmlEhpt5rIDxG5F7AmUOhHSjwb3bNlrNUrx9niGBAw';
+
+  let datesSelectionnees = []; 
+  let heuresSelectionnees = [];
+  let modeJourneeComplete = false;
+
+  const LISTE_HEURES = [
+    "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", 
+    "13:00 PM", "14:00 PM", "15:00 PM", "16:00 PM", "17:00 PM", "18:00 PM", "19:00 PM"
+  ];
+
+  let currentYear = new Date().getFullYear();
+  let currentMonth = new Date().getMonth();
+
+  const MONTHS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const DAYS_FR = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+
+  function verifierMotDePasseAdmin() {
+    const passSaisi = document.getElementById('admin-pass-input').value.trim();
+    const statusEl = document.getElementById('admin-status');
+    
+    if (passSaisi === 'Adamch2024..') { 
+      document.getElementById('admin-auth-zone').style.display = 'none';
+      document.getElementById('admin-controls-zone').style.display = 'block';
+      buildCalendar();
+      buildHeuresGrid();
+    } else {
+      statusEl.textContent = "Mot de passe incorrect ❌";
+      statusEl.style.color = "var(--magenta)";
+    }
+  }
+
+  document.getElementById('admin-pass-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') verifierMotDePasseAdmin();
+  });
+
+  function buildCalendar() {
+    const grid = document.getElementById('cal-grid');
+    const label = document.getElementById('cal-month-label');
+    label.textContent = MONTHS_FR[currentMonth] + ' ' + currentYear;
+    grid.innerHTML = '';
+
+    DAYS_FR.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-day-name';
+      el.textContent = d;
+      grid.appendChild(el);
+    });
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    for (let i = 0; i < firstDay; i++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day empty';
+      grid.appendChild(el);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const el = document.createElement('div');
+      const dateObj = new Date(currentYear, currentMonth, d);
+      dateObj.setHours(0,0,0,0);
+      const dateStr = dateObj.toLocaleDateString('fr-CA');
+
+      el.className = 'cal-day';
+      el.textContent = d;
+
+      if (dateObj < today) {
+        el.classList.add('past');
+      } else {
+        if (datesSelectionnees.includes(dateStr)) el.classList.add('selected');
+        el.onclick = () => toggleDateSelection(dateStr, el);
+      }
+      grid.appendChild(el);
+    }
+  }
+
+  function toggleDateSelection(dateStr, el) {
+    if (datesSelectionnees.includes(dateStr)) {
+      datesSelectionnees = datesSelectionnees.filter(d => d !== dateStr);
+      el.classList.remove('selected');
+    } else {
+      datesSelectionnees.push(dateStr);
+      el.classList.add('selected');
+    }
+    document.getElementById('dates-selectionnees-label').textContent = `${datesSelectionnees.length} date(s) sélectionnée(s)`;
+  }
+
+  function buildHeuresGrid() {
+    const grid = document.getElementById('time-grid');
+    grid.innerHTML = '';
+
+    LISTE_HEURES.forEach(h => {
+      const el = document.createElement('div');
+      el.className = 'time-slot';
+      el.textContent = h;
+      if (heuresSelectionnees.includes(h) && !modeJourneeComplete) el.classList.add('selected');
+      if (modeJourneeComplete) el.classList.add('selected');
+      el.onclick = () => {
+        modeJourneeComplete = false; 
+        toggleHeureSelection(h, el);
+      };
+      grid.appendChild(el);
+    });
+  }
+
+  function toggleHeureSelection(heureStr, el) {
+    if (heuresSelectionnees.includes(heureStr)) {
+      heuresSelectionnees = heuresSelectionnees.filter(h => h !== heureStr);
+      el.classList.remove('selected');
+    } else {
+      heuresSelectionnees.push(heureStr);
+      el.classList.add('selected');
+    }
+    updateHeuresLabel();
+  }
+
+  function selectionnerToutConge() {
+    modeJourneeComplete = true;
+    heuresSelectionnees = [];
+    buildHeuresGrid();
+    document.getElementById('heures-selectionnees-label').textContent = "Journée complète (CONGÉ)";
+  }
+
+  function selectionnerToutesHeures(cocherTout) {
+    modeJourneeComplete = false;
+    heuresSelectionnees = cocherTout ? [...LISTE_HEURES] : [];
+    buildHeuresGrid();
+    updateHeuresLabel();
+  }
+
+  function updateHeuresLabel() {
+    const label = document.getElementById('heures-selectionnees-label');
+    label.textContent = `${heuresSelectionnees.length} heure(s) sélectionnée(s)`;
+  }
+
+  function prevMonth() {
+    currentMonth--;
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    buildCalendar();
+  }
+
+  function nextMonth() {
+    currentMonth++;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    buildCalendar();
+  }
+
+  async function executerBlocageMassif() {
+    const statusCtrl = document.getElementById('admin-status-controls');
+
+    if (datesSelectionnees.length === 0) {
+      statusCtrl.textContent = "Sélectionnez au moins une date dans le calendrier ! ⚠️";
+      statusCtrl.style.color = "var(--magenta)";
+      return;
+    }
+    if (heuresSelectionnees.length === 0 && !modeJourneeComplete) {
+      statusCtrl.textContent = "Sélectionnez au moins un créneau horaire ! ⚠️";
+      statusCtrl.style.color = "var(--magenta)";
+      return;
+    }
+
+    statusCtrl.textContent = "Verrouillage précis en cours...";
+    statusCtrl.style.color = "var(--yellow)";
+
+    let requetesHeures = modeJourneeComplete ? ['JOURNÉE'] : heuresSelectionnees;
+
+    for (const date of datesSelectionnees) {
+      for (const heure of requetesHeures) {
+        try {
+          await fetch(`${SUPABASE_URL}/rest/v1/reservations`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`
+            },
+            body: JSON.stringify({
+              prenom: 'CONGÉ',
+              nom: 'Fermeture programmée',
+              telephone: '000-000-0000',
+              email: 'admin@driveclean.ca',
+              adresse: 'N/A',
+              vehicule: 'N/A',
+              services: 'Créneau bloqué par l\'administrateur',
+              date_rdv: date,
+              heure_rdv: heure,
+              total: 0
+            })
+          });
+        } catch (e) {
+          console.error(`Échec d'insertion : ${date} - ${heure}`, e);
+        }
+      }
+    }
+
+    statusCtrl.textContent = `Réussite ! Sélection bloquée strictement pour ${datesSelectionnees.length} date(s) ! 🎉`;
+    statusCtrl.style.color = "#00FF66";
+
+    datesSelectionnees = [];
+    heuresSelectionnees = [];
+    modeJourneeComplete = false;
+    document.getElementById('dates-selectionnees-label').textContent = "0 date sélectionnée";
+    document.getElementById('heures-selectionnees-label').textContent = "0 heure sélectionnée";
+    buildCalendar();
+    buildHeuresGrid();
+  }
+</script>
+</body>
+</html>
