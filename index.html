@@ -55,41 +55,33 @@
   .header-inner {
     max-width: 900px;
     margin: 0 auto;
-    padding: 28px 20px 20px;
+    padding: 20px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 25px;
   }
-  .logo-block {
-    background: var(--mid);
-    border: 2px solid var(--white);
-    outline: 3px solid var(--cyan);
-    outline-offset: -5px;
-    padding: 8px 22px;
-    position: relative;
+  .logo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
-  .logo-block::before, .logo-block::after {
-    content: '';
-    position: absolute;
-    width: 10px; height: 10px;
+  .logo-img {
+    height: 75px;
+    width: auto;
+    filter: drop-shadow(0 0 8px rgba(0, 200, 255, 0.5));
   }
-  .logo-block::before { top: -3px; left: -3px; border-top: 3px solid var(--magenta); border-left: 3px solid var(--magenta); }
-  .logo-block::after { bottom: -3px; right: -3px; border-bottom: 3px solid var(--magenta); border-right: 3px solid var(--magenta); }
-  .logo-drive {
+  .logo-text {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 42px;
-    letter-spacing: 2px;
+    font-size: 24px;
+    letter-spacing: 3px;
     color: var(--white);
+    margin-top: 4px;
+    text-transform: uppercase;
     line-height: 1;
-    -webkit-text-stroke: 1px var(--cyan);
   }
-  .logo-clean {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    letter-spacing: 12px;
-    color: var(--magenta);
-    line-height: 1;
-    margin-top: 2px;
+  .logo-text span {
+    color: var(--cyan);
   }
   .tagline {
     font-size: 13px;
@@ -606,15 +598,24 @@
     background: repeating-linear-gradient(90deg, var(--magenta) 0px, var(--magenta) 14px, var(--cyan) 14px, var(--cyan) 28px);
     margin-bottom: 28px;
   }
+  
+  footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--gray);
+    font-size: 13px;
+    letter-spacing: 1px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
 </style>
 </head>
 <body>
 
 <header>
   <div class="header-inner">
-    <div class="logo-block">
-      <div class="logo-drive">DRIVE</div>
-      <div class="logo-clean">CLEAN</div>
+    <div class="logo-wrapper">
+      <img src="logo-driveclean.png" alt="Drive Clean Logo" class="logo-img">
+      <div class="logo-text">DRIVE <span>CLEAN</span></div>
     </div>
     <div class="tagline">
       <span>Lavage Auto Mobile</span>
@@ -675,9 +676,11 @@
         <div class="vprice">+30$</div>
         <div class="checkmark">✓</div>
       </div>
-      <button class="btn btn-secondary" onclick="window.location.href='demande.html'" style="border-color: var(--cyan); color: var(--cyan); margin-top: 10px;">
-  ✨ Demande spéciale / Sur mesure
-</button>
+    </div>
+    <div style="margin-bottom: 25px; text-align: left;">
+      <button class="btn btn-secondary" onclick="window.location.href='demande.html'" style="border-color: var(--cyan); color: var(--cyan);">
+        ✨ Demande spéciale / Sur mesure
+      </button>
     </div>
     <p class="error-msg" id="err-vehicle">Veuillez sélectionner un type de véhicule.</p>
     <div class="btn-row">
@@ -805,7 +808,7 @@
     <p class="error-msg" id="err-form">Veuillez remplir tous les champs obligatoires.</p>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(3)">← Retour</button>
-      <button class="btn btn-confirm" onclick="confirm()">Confirmer ma réservation ✓</button>
+      <button class="btn btn-confirm" onclick="confirmBooking()">Confirmer ma réservation ✓</button>
     </div>
   </div>
 
@@ -817,7 +820,7 @@
       Notre équipe vous contactera sous 24h pour confirmer l'heure exacte.
     </p>
     <div class="success-detail" id="success-detail"></div>
-    <button class="btn btn-primary" onclick="reset()">Nouvelle réservation</button>
+    <button class="btn btn-primary" onclick="resetForm()">Nouvelle réservation</button>
   </div>
 
 </main>
@@ -947,8 +950,6 @@
       if (!res.ok) throw new Error('Impossible de charger les disponibilités');
 
       const reservationsExistantes = await res.json();
-      
-      // LOGIQUE CORRIGÉE : Une journée est bloquée uniquement s'il y a un enregistrement explicite 'JOURNÉE'
       const journeeBloquee = reservationsExistantes.some(r => r.heure_rdv === 'JOURNÉE');
 
       if (journeeBloquee) {
@@ -993,7 +994,6 @@
     document.getElementById('err-date').classList.remove('show');
   }
 
-  // Les autres fonctions de navigation et étapes restent identiques
   function prevMonth() {
     state.calMonth--;
     if (state.calMonth < 0) { state.calMonth = 11; state.calYear--; }
@@ -1010,6 +1010,16 @@
     buildCalendar();
   }
 
+  function updateRecap() {
+    const total = state.vehiclePrice + state.servicesTotal;
+    const listeServices = state.services.map(s => s.name).join(', ');
+
+    document.getElementById('r-vehicle').textContent = state.vehicle;
+    document.getElementById('r-services').textContent = listeServices || 'Aucun';
+    document.getElementById('r-date').textContent = `${state.date} à ${state.time}`;
+    document.getElementById('r-total').textContent = total + '$';
+  }
+
   function goStep(n) {
     if (n === 2 && !state.vehicle) {
       document.getElementById('err-vehicle').classList.add('show');
@@ -1024,177 +1034,116 @@
       return;
     }
 
-    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.step-tab').forEach((t, i) => {
-      t.classList.remove('active', 'done');
-      if (i + 1 < n) t.classList.add('done');
-      if (i + 1 === n) t.classList.add('active');
-    });
-    document.getElementById('step-' + n).classList.add('active');
-
-    if (n === 4) fillRecap();
-  }
-
-  function fillRecap() {
-    const total = state.vehiclePrice + state.servicesTotal;
-    document.getElementById('r-vehicle').textContent = state.vehicle;
-    document.getElementById('r-services').textContent = state.services.map(s => s.name).join(', ') || '—';
-    document.getElementById('r-date').textContent = (state.date || '—') + (state.time ? ' — ' + state.time : '');
-    document.getElementById('r-total').textContent = total + '$';
-  }
-
-  async function confirm() {
-    const fields = ['f-prenom','f-nom','f-tel','f-email','f-adresse'];
-    const missing = fields.some(f => !document.getElementById(f).value.trim());
-    if (missing) {
-      document.getElementById('err-form').classList.add('show');
-      return;
+    if (n === 4) {
+      updateRecap();
     }
 
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+    
+    document.getElementById(`step-${n}`).classList.add('active');
+    document.getElementById(`tab-${n}`).classList.add('active');
+
+    for (let i = 1; i < n; i++) {
+      document.getElementById(`tab-${i}`).classList.add('done');
+    }
+  }
+
+  async function confirmBooking() {
     const prenom = document.getElementById('f-prenom').value.trim();
     const nom = document.getElementById('f-nom').value.trim();
-    const tel = document.getElementById('f-tel').value.trim();
+    const telephone = document.getElementById('f-tel').value.trim();
     const email = document.getElementById('f-email').value.trim();
     const adresse = document.getElementById('f-adresse').value.trim();
-    const total = state.vehiclePrice + state.servicesTotal;
+    const errForm = document.getElementById('err-form');
 
-    const btn = document.querySelector('.btn-confirm');
-    btn.textContent = 'ENVOI EN COURS...';
-    btn.disabled = true;
-    btn.style.opacity = '0.6';
+    if (!prenom || !nom || !telephone || !email || !adresse) {
+      errForm.classList.add('show');
+      return;
+    }
+    errForm.classList.remove('show');
+
+    const total = state.vehiclePrice + state.servicesTotal;
+    const servicesText = state.services.map(s => s.name).join(', ');
+
+    const payload = {
+      prenom,
+      nom,
+      telephone,
+      email,
+      adresse,
+      vehicule: state.vehicle,
+      services: servicesText,
+      date_rdv: state.date,
+      heure_rdv: state.time,
+      total: total
+    };
 
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/reservations`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'apikey': SUPABASE_KEY,
           'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Prefer': 'return=minimal'
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
         },
-        body: JSON.stringify({
-          prenom,
-          nom,
-          telephone: tel,
-          email,
-          adresse,
-          vehicule: state.vehicle,
-          services: state.services.map(s => s.name).join(', '),
-          date_rdv: state.date,
-          heure_rdv: state.time,
-          total
-        })
+        body: JSON.stringify(payload)
       });
 
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || 'Erreur serveur');
+        const errText = await res.text();
+        throw new Error(errText);
       }
 
-      document.getElementById('success-detail').innerHTML =
-        `<strong>${prenom} ${nom}</strong><br>` +
-        `📅 ${state.date} — ${state.time}<br>` +
-        `📍 ${adresse}<br>` +
-        `🚗 ${state.vehicle}<br>` +
-        `✨ ${state.services.map(s=>s.name).join(', ')}<br>` +
-        `📞 ${tel}<br>` +
-        `<strong style="color:#FFD600">Total : ${total}$</strong>`;
+      document.getElementById('success-detail').innerHTML = `
+        <strong>Client :</strong> ${prenom} ${nom}<br>
+        <strong>Téléphone :</strong> ${telephone}<br>
+        <strong>Rendez-vous :</strong> ${state.date} — ${state.time}<br>
+        <strong>Véhicule :</strong> ${state.vehicle}<br>
+        <strong>Prestation :</strong> ${servicesText}<br>
+        <strong>Lieu :</strong> ${adresse}<br>
+        <strong>Montant :</strong> ${total}$
+      `;
 
       document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.step-tab').forEach(t => { t.classList.remove('active'); t.classList.add('done'); });
       document.getElementById('step-success').classList.add('active');
 
-    } catch (e) {
-      btn.textContent = 'Confirmer ma réservation ✓';
-      btn.disabled = false;
-      btn.style.opacity = '1';
-      const errEl = document.getElementById('err-form');
-      errEl.textContent = 'Erreur : ' + e.message;
-      errEl.classList.add('show');
+    } catch (error) {
+      console.error(error);
+      alert("Une erreur est survenue lors de l'enregistrement de votre réservation. Veuillez réessayer.");
     }
   }
 
-  function reset() {
-    state = { vehicle: null, vehiclePrice: 0, services: [], servicesTotal: 0, date: null, time: null, calYear: new Date().getFullYear(), calMonth: new Date().getMonth() };
-    document.querySelectorAll('.v-card, .svc-card').forEach(c => c.classList.remove('selected'));
-    document.querySelectorAll('.field-input').forEach(f => f.value = '');
-    document.querySelectorAll('.error-msg').forEach(e => e.classList.remove('show'));
-    document.getElementById('subtotal-display').textContent = '0$';
-    document.getElementById('time-section').style.display = 'none';
-    goStepDirect(1);
+  function resetForm() {
+    state.vehicle = null;
+    state.vehiclePrice = 0;
+    state.services = [];
+    state.servicesTotal = 0;
+    state.date = null;
+    state.time = null;
+
+    document.querySelectorAll('.v-card').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('done', 'active'));
+
+    document.getElementById('f-prenom').value = '';
+    document.getElementById('f-nom').value = '';
+    document.getElementById('f-tel').value = '';
+    document.getElementById('f-email').value = '';
+    document.getElementById('f-adresse').value = '';
+
+    updateSubtotal();
     buildCalendar();
+    document.getElementById('time-section').style.display = 'none';
+    goStep(1);
   }
 
-  function goStepDirect(n) {
-    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.step-tab').forEach((t, i) => {
-      t.classList.remove('active', 'done');
-      if (i + 1 === n) t.classList.add('active');
-    });
-    document.getElementById('step-' + n).classList.add('active');
-  }
-
-  buildCalendar();
+  // Initialisation au chargement de la page
+  window.onload = function() {
+    buildCalendar();
+  };
 </script>
-<style>
-@media (max-width: 600px) {
-  .header-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px 16px 16px;
-    gap: 12px;
-  }
-  .tagline {
-    border-left: none;
-    border-top: 2px solid var(--cyan);
-    padding-left: 0;
-    padding-top: 10px;
-    font-size: 11px;
-  }
-  .logo-drive { font-size: 34px; }
-  .logo-clean { font-size: 16px; letter-spacing: 8px; }
 
-  .step-tab { font-size: 11px; letter-spacing: 1px; padding: 10px 4px; }
-  .step-tab .snum { font-size: 16px; }
-
-  main { padding: 24px 14px 50px; }
-
-  .section-title { font-size: 26px; }
-
-  .vehicle-grid { grid-template-columns: 1fr; gap: 10px; }
-  .services-grid { grid-template-columns: 1fr; gap: 10px; }
-
-  .v-card, .svc-card { padding: 14px 16px; }
-  .v-card .vicon, .svc-card .sicon { font-size: 24px; }
-  .v-card .vname { font-size: 17px; }
-  .svc-card .sname { font-size: 17px; }
-
-  .calendar-wrap { padding: 16px; max-width: 100%; }
-  .cal-month { font-size: 18px; }
-  .cal-day { font-size: 12px; }
-  .cal-day-name { font-size: 10px; }
-
-  .time-section { max-width: 100%; }
-  .time-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-  .time-slot { font-size: 14px; padding: 9px 2px; }
-
-  .total-bar { padding: 12px 14px; }
-  .total-amount { font-size: 22px; }
-
-  .form-grid { grid-template-columns: 1fr; gap: 12px; }
-
-  .recap-box { padding: 14px; }
-  .recap-row { font-size: 13px; flex-direction: column; gap: 2px; }
-  .recap-val { text-align: left; }
-  .recap-total .recap-val { font-size: 20px; }
-
-  .btn-row { flex-direction: column; gap: 10px; }
-  .btn { width: 100%; justify-content: center; font-size: 16px; padding: 14px 20px; }
-
-  .success-icon { width: 64px; height: 64px; font-size: 28px; }
-  .success-title { font-size: 32px; }
-  .success-detail { padding: 14px 18px; font-size: 13px; text-align: left; }
-}
-</style>
 </body>
 </html>
