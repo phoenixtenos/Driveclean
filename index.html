@@ -606,6 +606,86 @@
     background: repeating-linear-gradient(90deg, var(--magenta) 0px, var(--magenta) 14px, var(--cyan) 14px, var(--cyan) 28px);
     margin-bottom: 28px;
   }
+
+  /* MODALE DES DROITS ET CONDITIONS JURIDIQUES */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 7, 15, 0.85);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-box {
+    background: var(--dark);
+    border: 2px solid var(--cyan);
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
+    width: 90%;
+    max-width: 600px;
+    padding: 25px;
+    position: relative;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+  }
+  .modal-overlay.show .modal-box {
+    transform: translateY(0);
+  }
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+    padding-bottom: 8px;
+  }
+  .modal-content {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.6;
+    max-height: 250px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-right: 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .modal-content h4 {
+    color: var(--white);
+    font-size: 14px;
+    margin: 12px 0 4px 0;
+  }
+  .modal-content::-webkit-scrollbar { width: 4px; }
+  .modal-content::-webkit-scrollbar-track { background: var(--darker); }
+  .modal-content::-webkit-scrollbar-thumb { background: var(--cyan); }
+
+  .checkbox-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+    cursor: pointer;
+    user-select: none;
+  }
+  .checkbox-wrap input {
+    margin-top: 3px;
+    accent-color: var(--cyan);
+  }
+  .checkbox-label {
+    font-size: 13px;
+    color: var(--white);
+    font-weight: 600;
+  }
 </style>
 </head>
 <body>
@@ -807,7 +887,7 @@
     <p class="error-msg" id="err-form">Veuillez remplir tous les champs obligatoires.</p>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(3)">← Retour</button>
-      <button class="btn btn-confirm" onclick="confirmBooking()">Confirmer ma réservation ✓</button>
+      <button class="btn btn-confirm" onclick="openTermsModal()">Confirmer ma réservation ✓</button>
     </div>
   </div>
 
@@ -823,6 +903,42 @@
   </div>
 
 </main>
+
+<div class="modal-overlay" id="terms-modal">
+  <div class="modal-box">
+    <div class="modal-title">Contrat de Service &amp; Décharge de Responsabilité</div>
+    <div class="modal-content">
+      <p style="color: var(--white); font-weight: bold; margin-bottom: 10px;">En confirmant votre réservation, vous acceptez sans réserve les conditions suivantes :</p>
+      
+      <h4>1. Exonération Générale de Responsabilité (Dommages)</h4>
+      <p>Drive Clean décline toute responsabilité pour les dommages matériels indirects ou non intentionnels pouvant survenir lors de la prestation. Drive Clean ne pourra être tenu responsable des dommages liés à des conditions préexistantes du véhicule (peinture écaillée, vernis dégradé, micro-fissures sur les vitres ou le pare-brise, joints usés, éléments de carrosserie mal fixés). Le nettoyage de composants déjà fragiles ou modifiés se fait entièrement aux risques du client.</p>
+      
+      <h4>2. Accès aux Services Publics (Eau et Électricité)</h4>
+      <p>Le client autorise expressément les techniciens de Drive Clean à se brancher et à utiliser les sources d'eau extérieure et d'électricité (prises standard) disponibles sur le lieu du rendez-vous pour l'exécution des travaux. Il est de la responsabilité du client de s'assurer que ces accès sont fonctionnels et conformes.</p>
+      
+      <h4>3. Droit d'Annulation Unilatéral et Sans Préavis</h4>
+      <p>Drive Clean se réserve le droit absolu d'annuler, de reporter ou d'interrompre tout rendez-vous à tout moment, pour des raisons logistiques, techniques, de sécurité ou météorologiques, et ce, sans obligation d'en informer le client à l'avance et sans qu'aucune compensation financière ne puisse être réclamée.</p>
+      
+      <h4>4. Objets Personnels et Habitacle</h4>
+      <p>Le client s'engage à retirer tout objet de valeur, argent, équipement électronique ou document confidentiel de l'habitacle avant l'arrivée du technicien. Drive Clean se dégage de toute responsabilité en cas de perte, de disparition ou de bris d'objets laissés à l'intérieur du véhicule.</p>
+
+      <h4>5. État du Véhicule et Risques Biologiques</h4>
+      <p>Drive Clean se réserve le droit de refuser le véhicule ou d'ajuster le tarif sur place si l'état de saleté intérieur présente un risque pour la santé (présence de moisissures, excréments d'animaux, fluides biologiques, infestations). Aucun remboursement du dépôt ou frais de déplacement ne sera accordé en cas de refus.</p>
+    </div>
+    
+    <label class="checkbox-wrap">
+      <input type="checkbox" id="agree-checkbox" onchange="toggleConfirmButton()">
+      <span class="checkbox-label" style="color: var(--cyan);">Je déclare être le propriétaire du véhicule (ou dûment autorisé) et j'accepte l'intégralité de cette décharge de responsabilité.</span>
+    </label>
+    
+    <p class="error-msg" id="err-modal-check" style="margin-bottom: 15px;">Veuillez accepter les conditions pour finaliser votre réservation.</p>
+
+    <div class="btn-row" style="justify-content: flex-end;">
+      <button class="btn btn-secondary" onclick="closeTermsModal()" style="padding: 10px 20px; font-size: 15px;">Refuser</button>
+      <button class="btn btn-confirm" id="modal-submit-btn" onclick="processFinalBooking()" style="padding: 10px 24px; font-size: 15px; opacity: 0.5; cursor: not-allowed;" disabled>J'accepte et je confirme ✓</button>
+    </div>
+  </div>
+</div>
 
 <footer>
   <span>Drive Clean</span> &mdash; Lavage Auto Mobile &mdash; Montréal &mdash; 2026
@@ -840,11 +956,11 @@
     calMonth: new Date().getMonth()
   };
 
-  // Bornes temporelles basées sur aujourd'hui
+  // Verrous de date basés sur aujourd'hui
   const START_MONTH = new Date().getMonth();
   const START_YEAR = new Date().getFullYear();
 
-  // Définition stricte de la date limite maximale (Dernier jour du mois prochain)
+  // Définition de la limite absolue (dernier jour du mois suivant)
   const MAX_LIMIT_DATE = new Date(START_YEAR, START_MONTH + 2, 0); 
 
   const TIME_SLOTS = [
@@ -918,9 +1034,9 @@
       el.className = 'cal-day';
       el.textContent = d;
       
-      // VERROU STRICT SUR LES JOURS : Si la date est dans le passé OU dépasse la limite du mois prochain
+      // Verrou strict sur les cellules des jours (passé ou au-delà du mois prochain)
       if (date < today || date > MAX_LIMIT_DATE) {
-        el.classList.add('past'); // Grise et désactive l'élément visuellement
+        el.classList.add('past');
       } else {
         if (date.getTime() === today.getTime()) el.classList.add('today');
         const dateStr = date.toLocaleDateString('fr-CA');
@@ -1071,7 +1187,8 @@
     }
   }
 
-  async function confirmBooking() {
+  // Ouvre la modale après validation des entrées du formulaire
+  function openTermsModal() {
     const prenom = document.getElementById('f-prenom').value.trim();
     const nom = document.getElementById('f-nom').value.trim();
     const telephone = document.getElementById('f-tel').value.trim();
@@ -1085,6 +1202,48 @@
     }
     errForm.classList.remove('show');
 
+    document.getElementById('agree-checkbox').checked = false;
+    toggleConfirmButton();
+    document.getElementById('err-modal-check').classList.remove('show');
+
+    document.getElementById('terms-modal').classList.add('show');
+  }
+
+  function closeTermsModal() {
+    document.getElementById('terms-modal').classList.remove('show');
+  }
+
+  function toggleConfirmButton() {
+    const isChecked = document.getElementById('agree-checkbox').checked;
+    const btn = document.getElementById('modal-submit-btn');
+    
+    if (isChecked) {
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.style.cursor = 'pointer';
+      document.getElementById('err-modal-check').classList.remove('show');
+    } else {
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+      btn.style.cursor = 'not-allowed';
+    }
+  }
+
+  // Traitement final et envoi vers Supabase
+  async function processFinalBooking() {
+    const isChecked = document.getElementById('agree-checkbox').checked;
+    if (!isChecked) {
+      document.getElementById('err-modal-check').classList.add('show');
+      return;
+    }
+
+    closeTermsModal();
+
+    const prenom = document.getElementById('f-prenom').value.trim();
+    const nom = document.getElementById('f-nom').value.trim();
+    const telephone = document.getElementById('f-tel').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const adresse = document.getElementById('f-adresse').value.trim();
     const total = state.vehiclePrice + state.servicesTotal;
     const servicesText = state.services.map(s => s.name).join(', ');
 
