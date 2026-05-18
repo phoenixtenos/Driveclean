@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Drive Clean — Prise de RDV</title>
+<title>Drive Clean — Réserver un Rendez-vous</title>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -28,7 +28,7 @@
     overflow-x: hidden;
   }
 
-  /* SCANLINES */
+  /* SCANLINES EFFECTS */
   body::before {
     content: '';
     position: fixed;
@@ -247,7 +247,7 @@
     color: var(--dark);
   }
 
-  /* SERVICES */
+  /* SERVICES CARDS */
   .services-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -547,7 +547,7 @@
   }
   .btn-confirm:hover { background: #FF005A; border-color: #FF005A; }
 
-  /* ERROR */
+  /* ERROR MESSAGES */
   .error-msg {
     color: var(--magenta);
     font-size: 13px;
@@ -557,7 +557,7 @@
   }
   .error-msg.show { display: block; }
 
-  /* SUCCESS */
+  /* SUCCESS PANEL */
   #step-success {
     text-align: center;
     padding: 60px 20px;
@@ -607,7 +607,7 @@
     margin-bottom: 28px;
   }
 
-  /* MODALE DES DROITS ET CONDITIONS JURIDIQUES */
+  /* TERMS AND CONDITIONS MODAL */
   .modal-overlay {
     position: fixed;
     inset: 0;
@@ -690,7 +690,11 @@
 </head>
 <body>
 
-<header>
+<header style="position: relative;">
+  <a href="index-en.html" style="position: absolute; top: 15px; right: 20px; color: var(--cyan); border: 1px solid var(--cyan); padding: 5px 12px; font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 1px; text-decoration: none; transition: all 0.2s; box-shadow: 0 0 8px rgba(0,200,255,0.2); z-index: 10;">
+    EN — ENGLISH
+  </a>
+
   <div class="header-inner">
     <div class="logo-block">
       <div class="logo-drive">DRIVE</div>
@@ -724,8 +728,8 @@
 
   <div class="step-panel active" id="step-1">
     <div class="deco-stripe"></div>
-    <div class="section-title">Quel véhicule ?</div>
-    <p class="section-sub">Le type de véhicule détermine le tarif de base du service.</p>
+    <div class="section-title">Sélectionner un Véhicule</div>
+    <p class="section-sub">Le type de véhicule détermine le tarif de base des prestations.</p>
     <div class="vehicle-grid">
       <div class="v-card" data-vehicle="Compacte / Berline" data-price="0" onclick="selectVehicle(this)">
         <div class="vicon">🚗</div>
@@ -734,31 +738,31 @@
         <div class="vprice">+0$</div>
         <div class="checkmark">✓</div>
       </div>
-      <div class="v-card" data-vehicle="SUV / 4×4" data-price="10" onclick="selectVehicle(this)">
+      <div class="v-card" data-vehicle="VUS / 4x4" data-price="10" onclick="selectVehicle(this)">
         <div class="vicon">🚙</div>
-        <div class="vname">SUV / 4×4</div>
+        <div class="vname">VUS / 4x4</div>
         <div class="vdesc">Tout-terrain, crossover, pickup</div>
         <div class="vprice">+10$</div>
         <div class="checkmark">✓</div>
       </div>
-      <div class="v-card" data-vehicle="Monospace / Van" data-price="20" onclick="selectVehicle(this)">
+      <div class="v-card" data-vehicle="Minivan / Fourgonnette" data-price="20" onclick="selectVehicle(this)">
         <div class="vicon">🚐</div>
-        <div class="vname">Monospace / Van</div>
-        <div class="vdesc">Minivan, fourgonnette familiale</div>
+        <div class="vname">Minivan / Van</div>
+        <div class="vdesc">Monospace, véhicule familial de loisir</div>
         <div class="vprice">+20$</div>
         <div class="checkmark">✓</div>
       </div>
-      <div class="v-card" data-vehicle="Utilitaire / Gros véhicule" data-price="30" onclick="selectVehicle(this)">
+      <div class="v-card" data-vehicle="Commercial / Grand Véhicule" data-price="30" onclick="selectVehicle(this)">
         <div class="vicon">🚛</div>
-        <div class="vname">Utilitaire / Gros</div>
-        <div class="vdesc">Camion, véhicule commercial</div>
+        <div class="vname">Commercial / Grand</div>
+        <div class="vdesc">Camionnette lourde, véhicule utilitaire</div>
         <div class="vprice">+30$</div>
         <div class="checkmark">✓</div>
       </div>
     </div>
     <div style="margin-bottom: 25px;">
       <button class="btn btn-secondary" onclick="window.location.href='demande.html'" style="border-color: var(--cyan); color: var(--cyan);">
-        ✨ Demande spéciale / Sur mesure
+        ✨ Demande Spéciale / Soumission Sur Mesure
       </button>
     </div>
     <p class="error-msg" id="err-vehicle">Veuillez sélectionner un type de véhicule.</p>
@@ -769,40 +773,40 @@
 
   <div class="step-panel" id="step-2">
     <div class="deco-stripe"></div>
-    <div class="section-title">Vos services</div>
-    <p class="section-sub">Sélectionnez un ou plusieurs services à ajouter à votre réservation.</p>
+    <div class="section-title">Choisir les Services</div>
+    <p class="section-sub">Sélectionnez une ou plusieurs prestations à ajouter à votre forfait.</p>
     <div class="services-grid">
-      <div class="svc-card" data-service="Lavage extérieur" data-price="45" onclick="toggleService(this)">
+      <div class="svc-card" data-service="Lavage Extérieur" data-price="45" onclick="toggleService(this)">
         <div class="sicon">✨</div>
-        <div class="sname">Lavage extérieur</div>
-        <div class="sdesc">Carrosserie, vitres, jantes</div>
+        <div class="sname">Lavage Extérieur</div>
+        <div class="sdesc">Carrosserie, vitres, jantes & pneus</div>
         <div class="sprice">+45$</div>
         <div class="checkmark">✓</div>
       </div>
-      <div class="svc-card" data-service="Nettoyage intérieur" data-price="30" onclick="toggleService(this)">
+      <div class="svc-card" data-service="Nettoyage Intérieur" data-price="30" onclick="toggleService(this)">
         <div class="sicon">🪑</div>
-        <div class="sname">Nettoyage intérieur</div>
+        <div class="sname">Nettoyage Intérieur</div>
         <div class="sdesc">Aspirateur, tableau de bord, vitres</div>
         <div class="sprice">+30$</div>
         <div class="checkmark">✓</div>
       </div>
-      <div class="svc-card" data-service="Armorall sur pneus" data-price="10" onclick="toggleService(this)">
+      <div class="svc-card" data-service="Protection Pneus Armorall" data-price="10" onclick="toggleService(this)">
         <div class="sicon">🔵</div>
-        <div class="sname">Armorall sur pneus</div>
-        <div class="sdesc">Protecteur brillant pour pneus</div>
+        <div class="sname">Protection Pneus Armorall</div>
+        <div class="sdesc">Fini brillant et protecteur longue durée</div>
         <div class="sprice">+10$</div>
         <div class="checkmark">✓</div>
       </div>
-      <div class="svc-card" data-service="Nettoyage du coffre" data-price="10" onclick="toggleService(this)">
+      <div class="svc-card" data-service="Nettoyage du Coffre" data-price="10" onclick="toggleService(this)">
         <div class="sicon">📦</div>
-        <div class="sname">Nettoyage du coffre</div>
-        <div class="sdesc">Aspirateur et nettoyage complet</div>
+        <div class="sname">Nettoyage du Coffre</div>
+        <div class="sdesc">Aspiration complète et assainissement</div>
         <div class="sprice">+10$</div>
         <div class="checkmark">✓</div>
       </div>
     </div>
     <div class="total-bar">
-      <span class="total-label">Sous-total estimé</span>
+      <span class="total-label">Sous-total Estimé</span>
       <span class="total-amount" id="subtotal-display">0$</span>
     </div>
     <p class="error-msg" id="err-service">Veuillez sélectionner au moins un service.</p>
@@ -814,8 +818,8 @@
 
   <div class="step-panel" id="step-3">
     <div class="deco-stripe"></div>
-    <div class="section-title">Choisissez une date</div>
-    <p class="section-sub">Sélectionnez la date souhaitée pour votre rendez-vous.</p>
+    <div class="section-title">Sélectionner une Date</div>
+    <p class="section-sub">Choisissez la date idéale pour votre intervention à domicile.</p>
     <div class="calendar-wrap">
       <div class="cal-header">
         <div class="cal-nav" onclick="prevMonth()">‹</div>
@@ -826,11 +830,11 @@
     </div>
 
     <div class="time-section" id="time-section" style="display:none">
-      <div class="time-section-title">— HEURE —</div>
+      <div class="time-section-title">— PLAGE HORAIRE —</div>
       <div class="time-grid" id="time-grid"></div>
     </div>
 
-    <p class="error-msg" id="err-date">Veuillez sélectionner une date et une heure.</p>
+    <p class="error-msg" id="err-date">Veuillez sélectionner une date et une heure de rendez-vous.</p>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(2)">← Retour</button>
       <button class="btn btn-primary" onclick="goStep(4)">Continuer →</button>
@@ -839,8 +843,8 @@
 
   <div class="step-panel" id="step-4">
     <div class="deco-stripe"></div>
-    <div class="section-title">Confirmation</div>
-    <p class="section-sub">Vérifiez votre récapitulatif et renseignez vos informations.</p>
+    <div class="section-title">Validation finalisée</div>
+    <p class="section-sub">Vérifiez vos informations avant de confirmer la réservation.</p>
 
     <div class="recap-box">
       <div class="recap-title">— RÉCAPITULATIF —</div>
@@ -849,15 +853,15 @@
         <span class="recap-val" id="r-vehicle">—</span>
       </div>
       <div class="recap-row">
-        <span class="recap-key">Services</span>
+        <span class="recap-key">Prestations</span>
         <span class="recap-val" id="r-services">—</span>
       </div>
       <div class="recap-row">
-        <span class="recap-key">Date</span>
+        <span class="recap-key">Rendez-vous</span>
         <span class="recap-val" id="r-date">—</span>
       </div>
       <div class="recap-row recap-total">
-        <span class="recap-key">TOTAL</span>
+        <span class="recap-key">TOTAL NET</span>
         <span class="recap-val" id="r-total">0$</span>
       </div>
     </div>
@@ -865,38 +869,38 @@
     <div class="form-grid">
       <div class="field-wrap">
         <label class="field-label">Prénom</label>
-        <input class="field-input" type="text" id="f-prenom" placeholder="Jean">
+        <input class="field-input" type="text" id="f-prenom" placeholder="Ex: Jean">
       </div>
       <div class="field-wrap">
-        <label class="field-label">Nom</label>
-        <input class="field-input" type="text" id="f-nom" placeholder="Tremblay">
+        <label class="field-label">Nom de famille</label>
+        <input class="field-input" type="text" id="f-nom" placeholder="Ex: Tremblay">
       </div>
       <div class="field-wrap">
-        <label class="field-label">Téléphone</label>
-        <input class="field-input" type="tel" id="f-tel" placeholder="514-555-0000">
+        <label class="field-label">Numéro de téléphone</label>
+        <input class="field-input" type="tel" id="f-tel" placeholder="514-555-0199">
       </div>
       <div class="field-wrap">
-        <label class="field-label">Courriel</label>
-        <input class="field-input" type="email" id="f-email" placeholder="jean@email.com">
+        <label class="field-label">Adresse Courriel</label>
+        <input class="field-input" type="email" id="f-email" placeholder="nom@exemple.com">
       </div>
       <div class="field-wrap form-full">
-        <label class="field-label">Adresse du rendez-vous</label>
-        <input class="field-input" type="text" id="f-adresse" placeholder="123 rue Principale, Montréal, QC">
+        <label class="field-label">Adresse de l'intervention</label>
+        <input class="field-input" type="text" id="f-adresse" placeholder="123 rue Sherbrooke Ouest, Montréal, QC">
       </div>
     </div>
-    <p class="error-msg" id="err-form">Veuillez remplir tous les champs obligatoires.</p>
+    <p class="error-msg" id="err-form">Veuillez remplir l'ensemble des champs obligatoires.</p>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(3)">← Retour</button>
-      <button class="btn btn-confirm" onclick="openTermsModal()">Confirmer ma réservation ✓</button>
+      <button class="btn btn-confirm" onclick="openTermsModal()">Confirmer la demande ✓</button>
     </div>
   </div>
 
   <div class="step-panel" id="step-success">
     <div class="success-icon">✓</div>
-    <div class="success-title">Réservation confirmée !</div>
+    <div class="success-title">Demande Enregistrée !</div>
     <p class="success-sub">
-      Votre rendez-vous a bien été enregistré.<br>
-      Notre équipe vous contactera sous 24h pour confirmer l'heure exacte.
+      Votre réservation a été transmise avec succès à notre base de données.<br>
+      Notre équipe vous contactera dans un délai de 24 heures pour valider les accès techniques.
     </p>
     <div class="success-detail" id="success-detail"></div>
     <button class="btn btn-primary" onclick="resetForm()">Nouvelle réservation</button>
@@ -906,42 +910,42 @@
 
 <div class="modal-overlay" id="terms-modal">
   <div class="modal-box">
-    <div class="modal-title">Contrat de Service &amp; Décharge de Responsabilité</div>
+    <div class="modal-title">Conditions de Service &amp; Décharge de Responsabilité</div>
     <div class="modal-content">
-      <p style="color: var(--white); font-weight: bold; margin-bottom: 10px;">En confirmant votre réservation, vous acceptez sans réserve les conditions suivantes :</p>
+      <p style="color: var(--white); font-weight: bold; margin-bottom: 10px;">En confirmant votre réservation, vous acceptez expressément les clauses contractuelles suivantes :</p>
       
       <h4>1. Exonération Générale de Responsabilité (Dommages)</h4>
-      <p>Drive Clean décline toute responsabilité pour les dommages matériels indirects ou non intentionnels pouvant survenir lors de la prestation. Drive Clean ne pourra être tenu responsable des dommages liés à des conditions préexistantes du véhicule (peinture écaillée, vernis dégradé, micro-fissures sur les vitres ou le pare-brise, joints usés, éléments de carrosserie mal fixés). Le nettoyage de composants déjà fragiles ou modifiés se fait entièrement aux risques du client.</p>
+      <p>L'entreprise Drive Clean décline toute responsabilité pour tout dommage matériel indirect ou involontaire survenant lors de l'exécution de l'entretien. Drive Clean ne pourra être tenue responsable des bris liés à l'état d'usure préalable du véhicule (peinture écaillée, vernis dégradé, micro-fissures sur vitrages, joints desséchés, éléments de carrosserie mal fixés). Le nettoyage d'éléments fragilisés ou modifiés s'effectue aux risques exclusifs du client.</p>
       
-      <h4>2. Accès aux Services Publics (Eau et Électricité)</h4>
-      <p>Le client autorise expressément les techniciens de Drive Clean à se brancher et à utiliser les sources d'eau extérieure et d'électricité (prises standard) disponibles sur le lieu du rendez-vous pour l'exécution des travaux. Il est de la responsabilité du client de s'assurer que ces accès sont fonctionnels et conformes.</p>
+      <h4>2. Accès aux Infrastructures Communes (Eau et Électricité)</h4>
+      <p>Le client autorise expressément les techniciens de Drive Clean à se raccorder et à utiliser les sources d'eau extérieures ainsi que les prises électriques standards (120V) disponibles sur le lieu de l'intervention pour la bonne exécution des travaux. Il est de la responsabilité du client de s'assurer de la conformité de ces accès.</p>
       
-      <h4>3. Droit d'Annulation Unilatéral et Sans Préavis</h4>
-      <p>Drive Clean se réserve le droit absolu d'annuler, de reporter ou d'interrompre tout rendez-vous à tout moment, pour des raisons logistiques, techniques, de sécurité ou météorologiques, et ce, sans obligation d'en informer le client à l'avance et sans qu'aucune compensation financière ne puisse être réclamée.</p>
+      <h4>3. Droit de Résiliation Unilatérale sans Préavis</h4>
+      <p>Drive Clean se réserve le droit absolu d'annuler, de reporter ou d'interrompre tout rendez-vous à tout moment pour des raisons logistiques, techniques, de sécurité ou de force majeure météorologique (pluie, gel intense, orages), sans obligation de notification préalable et sans qu'aucun dédommagement financier ne puisse être réclamé.</p>
       
-      <h4>4. Objets Personnels et Habitacle</h4>
-      <p>Le client s'engage à retirer tout objet de valeur, argent, équipement électronique ou document confidentiel de l'habitacle avant l'arrivée du technicien. Drive Clean se dégage de toute responsabilité en cas de perte, de disparition ou de bris d'objets laissés à l'intérieur du véhicule.</p>
+      <h4>4. Objets Personnels et Effets de Valeur</h4>
+      <p>Le client s'engage à vider l'habitacle de sa voiture de tout objet de valeur, somme d'argent, équipement électronique ou document confidentiel avant l'arrivée du technicien. Drive Clean décline toute responsabilité en cas de perte, disparition ou détérioration d'objets laissés à l'intérieur du véhicule.</p>
 
-      <h4>5. État du Véhicule et Risques Biologiques</h4>
-      <p>Drive Clean se réserve le droit de refuser le véhicule ou d'ajuster le tarif sur place si l'état de saleté intérieur présente un risque pour la santé (présence de moisissures, excréments d'animaux, fluides biologiques, infestations). Aucun remboursement du dépôt ou frais de déplacement ne sera accordé en cas de refus.</p>
+      <h4>5. État d'insalubrité et Risques Biologiques</h4>
+      <p>Drive Clean se réserve le droit de refuser le véhicule ou de réajuster le prix sur place si l'état de saleté intérieur présente un risque sanitaire (moisissures avancées, déjections animales, fluides biologiques, présence de nuisibles). Aucun remboursement de déplacement ne sera accordé.</p>
     </div>
     
     <label class="checkbox-wrap">
       <input type="checkbox" id="agree-checkbox" onchange="toggleConfirmButton()">
-      <span class="checkbox-label" style="color: var(--cyan);">Je déclare être le propriétaire du véhicule (ou dûment autorisé) et j'accepte l'intégralité de cette décharge de responsabilité.</span>
+      <span class="checkbox-label" style="color: var(--cyan);">Je déclare être le propriétaire du véhicule (ou dûment mandaté) et j'accepte l'intégralité de cette décharge de responsabilité.</span>
     </label>
     
-    <p class="error-msg" id="err-modal-check" style="margin-bottom: 15px;">Veuillez accepter les conditions pour finaliser votre réservation.</p>
+    <p class="error-msg" id="err-modal-check" style="margin-bottom: 15px;">Veuillez cocher la case pour valider la décharge contractuelle.</p>
 
     <div class="btn-row" style="justify-content: flex-end;">
       <button class="btn btn-secondary" onclick="closeTermsModal()" style="padding: 10px 20px; font-size: 15px;">Refuser</button>
-      <button class="btn btn-confirm" id="modal-submit-btn" onclick="processFinalBooking()" style="padding: 10px 24px; font-size: 15px; opacity: 0.5; cursor: not-allowed;" disabled>J'accepte et je confirme ✓</button>
+      <button class="btn btn-confirm" id="modal-submit-btn" onclick="processFinalBooking()" style="padding: 10px 24px; font-size: 15px; opacity: 0.5; cursor: not-allowed;" disabled>Accepter et Confirmer ✓</button>
     </div>
   </div>
 </div>
 
 <footer>
-  <span>Drive Clean</span> &mdash; Lavage Auto Mobile &mdash; Montréal &mdash; 2026
+  <span>Drive Clean</span> &mdash; Lavage Automobile Mobile &mdash; Montréal &mdash; 2026
 </footer>
 
 <script>
@@ -956,11 +960,8 @@
     calMonth: new Date().getMonth()
   };
 
-  // Verrous de date basés sur aujourd'hui
   const START_MONTH = new Date().getMonth();
   const START_YEAR = new Date().getFullYear();
-
-  // Définition de la limite absolue (dernier jour du mois suivant)
   const MAX_LIMIT_DATE = new Date(START_YEAR, START_MONTH + 2, 0); 
 
   const TIME_SLOTS = [
@@ -1034,7 +1035,6 @@
       el.className = 'cal-day';
       el.textContent = d;
       
-      // Verrou strict sur les cellules des jours (passé ou au-delà du mois prochain)
       if (date < today || date > MAX_LIMIT_DATE) {
         el.classList.add('past');
       } else {
@@ -1055,7 +1055,7 @@
     document.getElementById('err-date').classList.remove('show');
     
     const grid = document.getElementById('time-grid');
-    grid.innerHTML = '<div style="grid-column: 1/-1; color: var(--gray); font-size: 14px;">Vérification des disponibilités...</div>';
+    grid.innerHTML = '<div style="grid-column: 1/-1; color: var(--gray); font-size: 14px;">Analyse des créneaux disponibles...</div>';
     
     const ts = document.getElementById('time-section');
     ts.style.display = 'block';
@@ -1086,7 +1086,7 @@
 
     } catch (error) {
       console.error(error);
-      grid.innerHTML = '<div style="grid-column: 1/-1; color: var(--magenta); font-size: 14px;">Erreur réseau. Réessayez.</div>';
+      grid.innerHTML = '<div style="grid-column: 1/-1; color: var(--magenta); font-size: 14px;">Erreur réseau. Veuillez réessayer.</div>';
     }
   }
 
@@ -1150,10 +1150,10 @@
 
   function updateRecap() {
     const total = state.vehiclePrice + state.servicesTotal;
-    const listeServices = state.services.map(s => s.name).join(', ');
+    const listeservices = state.services.map(s => s.name).join(', ');
 
     document.getElementById('r-vehicle').textContent = state.vehicle;
-    document.getElementById('r-services').textContent = listeServices || 'Aucun';
+    document.getElementById('r-services').textContent = listeservices || 'Aucun';
     document.getElementById('r-date').textContent = `${state.date} à ${state.time}`;
     document.getElementById('r-total').textContent = total + '$';
   }
@@ -1187,7 +1187,6 @@
     }
   }
 
-  // Ouvre la modale après validation des entrées du formulaire
   function openTermsModal() {
     const prenom = document.getElementById('f-prenom').value.trim();
     const nom = document.getElementById('f-nom').value.trim();
@@ -1229,7 +1228,6 @@
     }
   }
 
-  // Traitement final et envoi vers Supabase
   async function processFinalBooking() {
     const isChecked = document.getElementById('agree-checkbox').checked;
     if (!isChecked) {
@@ -1282,9 +1280,9 @@
         <strong>Téléphone :</strong> ${telephone}<br>
         <strong>Rendez-vous :</strong> ${state.date} — ${state.time}<br>
         <strong>Véhicule :</strong> ${state.vehicle}<br>
-        <strong>Prestation :</strong> ${servicesText}<br>
-        <strong>Lieu :</strong> ${adresse}<br>
-        <strong>Montant :</strong> ${total}$
+        <strong>Services :</strong> ${servicesText}<br>
+        <strong>Adresse :</strong> ${adresse}<br>
+        <strong>Montant dû :</strong> ${total}$
       `;
 
       document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
@@ -1292,7 +1290,7 @@
 
     } catch (error) {
       console.error(error);
-      alert("Une erreur est survenue lors de l'enregistrement de votre réservation. Veuillez réessayer.");
+      alert("Une erreur est survenue lors de l'enregistrement. Veuillez réessayer.");
     }
   }
 
