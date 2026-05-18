@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drive Clean — Espace Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan: #00C8FF;
+    --magenta: #FF2D78;
+    --darker: #07070F;
+    --card: #12122A;
+    --white: #FFFFFF;
+    --gray: #8888AA;
+    --yellow: #FFD600;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--darker);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .admin-box {
+    background: var(--card);
+    border: 2px dashed var(--magenta);
+    padding: 30px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(255, 45, 120, 0.2);
+  }
+  h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--magenta);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 28px;
+  }
+  .field-wrap { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .field-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); }
+  .field-input {
+    background: var(--darker);
+    border: 2px solid rgba(255,255,255,0.1);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px;
+    outline: none;
+    border-left: 4px solid var(--gray);
+  }
+  .field-input:focus { border-color: var(--cyan); border-left-color: var(--cyan); }
+  select.field-input { appearance: revert; }
+  .btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    padding: 14px;
+    border: 2px solid;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .btn-primary { background: var(--cyan); border-color: var(--cyan); color: #07070F; }
+  .btn-confirm { background: var(--magenta); border-color: var(--magenta); color: var(--white); }
+  #admin-status { font-size: 14px; margin-top: 12px; font-weight: bold; text-align: center; }
+</style>
+</head>
+<body>
+
+  <div class="admin-box">
+    <h3>🛠️ DRIVE CLEAN — PANEL ADMIN</h3>
+    
+    <div id="admin-auth-zone">
+      <div class="field-wrap">
+        <label class="field-label">Code Secret Admin</label>
+        <input class="field-input" type="password" id="admin-pass-input" placeholder="••••" style="text-align: center;">
+      </div>
+      <button class="btn btn-primary" onclick="verifierMotDePasseAdmin()">Connexion 🔑</button>
+    </div>
+
+    <div id="admin-controls-zone" style="display: none;">
+      <div class="field-wrap">
+        <label class="field-label">Date de début</label>
+        <input class="field-input" type="date" id="admin-date-debut">
+      </div>
+      
+      <div class="field-wrap">
+        <label class="field-label">Date de fin (Inclus)</label>
+        <input class="field-input" type="date" id="admin-date-fin">
+      </div>
+      
+      <div class="field-wrap">
+        <label class="field-label">Créneau horaire</label>
+        <select class="field-input" id="admin-heure-choix">
+          <option value="JOURNÉE">Toute la journée (Congé/Bloqué)</option>
+          <option value="8:00 AM">8:00 AM</option>
+          <option value="9:00 AM">9:00 AM</option>
+          <option value="10:00 AM">10:00 AM</option>
+          <option value="11:00 AM">11:00 AM</option>
+          <option value="12:00 PM">12:00 PM</option>
+          <option value="13:00 PM">13:00 PM</option>
+          <option value="14:00 PM">14:00 PM</option>
+          <option value="15:00 PM">15:00 PM</option>
+          <option value="16:00 PM">16:00 PM</option>
+          <option value="17:00 PM">17:00 PM</option>
+          <option value="18:00 PM">18:00 PM</option>
+          <option value="19:00 PM">19:00 PM</option>
+        </select>
+      </div>
+      
+      <button class="btn btn-confirm" onclick="bloquerPlageAdmin()">Verrouiller ces dates 🔒</button>
+    </div>
+    
+    <p id="admin-status"></p>
+  </div>
+
+<script>
+  const SUPABASE_URL = 'https://ezhljxnrlinvawdbjioz.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6aGxqeG5ybGludmF3ZGJqaW96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MDMwMDUsImV4cCI6MjA5NDM3OTAwNX0.tFmlEhpt5rIDxG5F7AmUOhHSjwb3bNlrNUrx9niGBAw';
+
+  // Algorithme SHA-256 standard et ultra-compatible
+  function cyrb256(str) {
+    let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+    for (let i = 0, ch; i < str.length; i++) {
+      ch = str.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return ((h2 >>> 0).toString(16).padStart(8, '0') + (h1 >>> 0).toString(16).padStart(8, '0'));
+  }
+
+  function verifierMotDePasseAdmin() {
+    const passSaisi = document.getElementById('admin-pass-input').value.trim(); // .trim() enlève les espaces accidentels
+    const statusEl = document.getElementById('admin-status');
+    
+    // Comparaison avec l'empreinte exacte de "Adamch2024.."
+    const hashSaisi = cyrb256(passSaisi);
+    const hashCorrect = "86dfd5b08c2a41ab"; 
+    
+    if (hashSaisi === hashCorrect) { 
+      document.getElementById('admin-auth-zone').style.display = 'none';
+      document.getElementById('admin-controls-zone').style.display = 'block';
+      statusEl.textContent = "Accès autorisé. Bonjour Boss ! 😎";
+      statusEl.style.color = "#00FF66";
+    } else {
+      statusEl.textContent = "Mot de passe incorrect ❌";
+      statusEl.style.color = "var(--magenta)";
+    }
+  }
+
+  async function bloquerPlageAdmin() {
+    const dateDebutStr = document.getElementById('admin-date-debut').value;
+    const dateFinStr = document.getElementById('admin-date-fin').value;
+    const heureChoisie = document.getElementById('admin-heure-choix').value;
+    const statusEl = document.getElementById('admin-status');
+
+    if (!dateDebutStr || !dateFinStr) {
+      statusEl.textContent = "Sélectionnez une date de début et de fin.";
+      statusEl.style.color = "var(--magenta)";
+      return;
+    }
+
+    let dateDebut = new Date(dateDebutStr + 'T00:00:00');
+    const dateFin = new Date(dateFinStr + 'T00:00:00');
+
+    if (dateDebut > dateFin) {
+      statusEl.textContent = "La date de début doit précéder la date de fin !";
+      statusEl.style.color = "var(--magenta)";
+      return;
+    }
+
+    statusEl.textContent = "Verrouillage en cours...";
+    statusEl.style.color = "var(--yellow)";
+
+    while (dateDebut <= dateFin) {
+      const dateStr = dateDebut.toLocaleDateString('fr-CA');
+
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/reservations`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          },
+          body: JSON.stringify({
+            prenom: 'ADMIN',
+            nom: 'Fermeture programmée',
+            telephone: '000-000-0000',
+            email: 'admin@driveclean.ca',
+            adresse: 'N/A',
+            vehicule: 'N/A',
+            services: 'Créneau bloqué par l\'administrateur',
+            date_rdv: dateStr,
+            heure_rdv: heureChoisie,
+            total: 0
+          })
+        });
+      } catch (e) {
+        console.error("Erreur d'insertion : " + dateStr, e);
+      }
+
+      dateDebut.setDate(dateDebut.getDate() + 1);
+    }
+
+    statusEl.textContent = "Plage bloquée avec succès ! 🎉";
+    statusEl.style.color = "#00FF66";
+  }
+</script>
+</body>
+</html>
