@@ -376,7 +376,7 @@
   }
   .cal-day:hover:not(.empty):not(.past) { border-color: var(--cyan); color: var(--cyan); }
   .cal-day.empty { cursor: default; }
-  .cal-day.past { color: rgba(255,255,255,0.2); cursor: default; }
+  .cal-day.past { color: rgba(255,255,255,0.15); cursor: default; }
   .cal-day.today { color: var(--yellow); border-color: rgba(255,214,0,0.3); }
   .cal-day.selected { background: var(--cyan); color: var(--dark); border-color: var(--cyan); font-weight: 700; }
 
@@ -840,9 +840,12 @@
     calMonth: new Date().getMonth()
   };
 
-  // Verrous de date basés sur aujourd'hui
+  // Bornes temporelles basées sur aujourd'hui
   const START_MONTH = new Date().getMonth();
   const START_YEAR = new Date().getFullYear();
+
+  // Définition stricte de la date limite maximale (Dernier jour du mois prochain)
+  const MAX_LIMIT_DATE = new Date(START_YEAR, START_MONTH + 2, 0); 
 
   const TIME_SLOTS = [
     { h: '8:00', ampm: 'AM' }, { h: '9:00', ampm: 'AM' }, { h: '10:00', ampm: 'AM' }, { h: '11:00', ampm: 'AM' },
@@ -914,8 +917,10 @@
       date.setHours(0,0,0,0);
       el.className = 'cal-day';
       el.textContent = d;
-      if (date < today) {
-        el.classList.add('past');
+      
+      // VERROU STRICT SUR LES JOURS : Si la date est dans le passé OU dépasse la limite du mois prochain
+      if (date < today || date > MAX_LIMIT_DATE) {
+        el.classList.add('past'); // Grise et désactive l'élément visuellement
       } else {
         if (date.getTime() === today.getTime()) el.classList.add('today');
         const dateStr = date.toLocaleDateString('fr-CA');
@@ -997,7 +1002,6 @@
     document.getElementById('err-date').classList.remove('show');
   }
 
-  // Empêche de revenir avant le mois en cours
   function prevMonth() {
     if (state.calYear === START_YEAR && state.calMonth === START_MONTH) {
       return;
@@ -1009,7 +1013,6 @@
     buildCalendar();
   }
 
-  // Empêche d'avancer plus loin que le mois prochain (Mois Courant + 1)
   function nextMonth() {
     let targetMonth = START_MONTH + 1;
     let targetYear = START_YEAR;
