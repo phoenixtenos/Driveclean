@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drive Clean — Demande Spéciale</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan: #00C8FF;
+    --magenta: #FF2D78;
+    --dark: #0D0D1A;
+    --darker: #07070F;
+    --card: #12122A;
+    --white: #FFFFFF;
+    --gray: #8888AA;
+    --yellow: #FFD600;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--darker);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .form-box {
+    background: var(--card);
+    border: 2px solid var(--cyan);
+    padding: 30px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.1);
+  }
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    font-size: 32px;
+  }
+  .field-wrap { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; text-align: left; }
+  .field-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); }
+  .field-input {
+    background: var(--dark);
+    border: 2px solid rgba(255,255,255,0.1);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px;
+    outline: none;
+    border-left: 4px solid var(--gray);
+  }
+  .field-input:focus { border-color: var(--cyan); border-left-color: var(--cyan); }
+  textarea.field-input { min-height: 120px; resize: vertical; }
+  .btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    text-transform: uppercase;
+  }
+  .btn-submit { background: var(--magenta); color: var(--white); }
+  .btn-submit:hover { background: #FF005A; }
+  .btn-back { background: transparent; border: 2px solid rgba(255,255,255,0.2); color: var(--gray); margin-top: 15px; }
+  .btn-back:hover { border-color: var(--white); color: var(--white); }
+  #status-msg { font-size: 14px; margin-top: 12px; font-weight: bold; text-align: center; }
+</style>
+</head>
+<body>
+
+  <div class="form-box">
+    <h2>📩 FAIRE UNE DEMANDE SPÉCIALE</h2>
+    <p style="color: var(--gray); font-size: 14px; margin-bottom: 20px;">Expliquez-nous votre besoin particulier (taches tenaces, VR, flotte commerciale) et joignez des photos si nécessaire.</p>
+    
+    <div class="field-wrap">
+      <label class="field-label">Nom Complet</label>
+      <input class="field-input" type="text" id="sp-nom" placeholder="Jean Tremblay">
+    </div>
+    
+    <div class="field-wrap">
+      <label class="field-label">Téléphone</label>
+      <input class="field-input" type="tel" id="sp-tel" placeholder="514-555-0000">
+    </div>
+
+    <div class="field-wrap">
+      <label class="field-label">Votre Message / Description du besoin</label>
+      <textarea class="field-input" id="sp-message" placeholder="Décrivez votre demande en détail ici..."></textarea>
+    </div>
+
+    <div class="field-wrap">
+      <label class="field-label">Ajouter des photos ou documents (Optionnel)</label>
+      <input class="field-input" type="file" id="sp-fichiers" multiple accept="image/*,.pdf,.doc,.docx" style="border-left-color: var(--cyan);">
+    </div>
+
+    <button class="btn btn-submit" onclick="envoyerDemandeSpeciale()">Envoyer la demande 🚀</button>
+    <button class="btn btn-back" onclick="window.location.href='index.html'">🗙 Annuler et retourner au site</button>
+    
+    <div id="status-msg"></div>
+  </div>
+
+<script>
+  const SUPABASE_URL = 'https://ezhljxnrlinvawdbjioz.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6aGxqeG5ybGludmF3ZGJqaW96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MDMwMDUsImV4cCI6MjA5NDM3OTAwNX0.tFmlEhpt5rIDxG5F7AmUOhHSjwb3bNlrNUrx9niGBAw';
+
+  async function envoyerDemandeSpeciale() {
+    const nom = document.getElementById('sp-nom').value.trim();
+    const tel = document.getElementById('sp-tel').value.trim();
+    const message = document.getElementById('sp-message').value.trim();
+    const fichiersInput = document.getElementById('sp-fichiers');
+    const statusEl = document.getElementById('status-msg');
+
+    if (!nom || !tel || !message) {
+      statusEl.textContent = "Veuillez remplir tous les champs obligatoires ⚠️";
+      statusEl.style.color = "var(--magenta)";
+      return;
+    }
+
+    statusEl.textContent = "Envoi en cours...";
+    statusEl.style.color = "var(--yellow)";
+
+    let liensFichiers = [];
+
+    // 1. GESTION DE L'UPLOAD DES FICHIERS (Si le client en ajoute)
+    if (fichiersInput.files.length > 0) {
+      for (let i = 0; i < fichiersInput.files.length; i++) {
+        const fichier = fichiersInput.files[i];
+        // Création d'un nom de fichier unique pour éviter les doublons dans Supabase
+        const nomFichierUnique = `${Date.now()}_${fichier.name.replace(/\s+/g, '_')}`;
+        
+        try {
+          const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/demandes_speciales/${nomFichierUnique}`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': fichier.type
+            },
+            body: fichier
+          });
+
+          if (uploadRes.ok) {
+            // URL publique du fichier téléversé
+            const urlPublique = `${SUPABASE_URL}/storage/v1/object/public/demandes_speciales/${nomFichierUnique}`;
+            liensFichiers.push(urlPublique);
+          } else {
+            console.error("Échec upload de:", fichier.name);
+          }
+        } catch (err) {
+          console.error("Erreur lors de l'upload:", err);
+        }
+      }
+    }
+
+    // 2. ENVOI DES DONNÉES DANS LA TABLE DES RÉSERVATIONS / DEMANDES
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/reservations`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        },
+        body: JSON.stringify({
+          prenom: 'DEMANDE',
+          nom: nom,
+          telephone: tel,
+          email: 'speciale@driveclean.ca',
+          adresse: 'À déterminer',
+          vehicule: 'Spécial / Sur mesure',
+          services: message, // Ton texte explicatif se stocke dans la colonne services
+          date_rdv: new Date().toLocaleDateString('fr-CA'), // Date d'aujourd'hui
+          heure_rdv: 'En attente',
+          total: 0,
+          // Si tu as ou si tu crées une colonne texte dédiée aux URLs des fichiers, on la remplit ici :
+          adresse: `Fichiers joints : ${liensFichiers.join(' | ')} — Adresse : N/A` 
+        })
+      });
+
+      if (!res.ok) throw new Error("Erreur lors de la sauvegarde de la demande.");
+
+      statusEl.textContent = "Votre demande spéciale a été envoyée avec succès ! 🎉 Nous vous contacterons rapidement.";
+      statusEl.style.color = "#00FF66";
+
+      // Réinitialisation du formulaire
+      document.getElementById('sp-nom').value = '';
+      document.getElementById('sp-tel').value = '';
+      document.getElementById('sp-message').value = '';
+      fichiersInput.value = '';
+
+    } catch (error) {
+      statusEl.textContent = "Erreur : " + error.message;
+      statusEl.style.color = "var(--magenta)";
+    }
+  }
+</script>
+</body>
+</html>
