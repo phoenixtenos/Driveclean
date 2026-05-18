@@ -193,7 +193,6 @@
     gap: 14px;
     margin-bottom: 30px;
   }
-  @media (max-width: 560px) { .vehicle-grid { grid-template-columns: 1fr; } }
 
   .v-card {
     background: var(--card);
@@ -254,7 +253,6 @@
     gap: 14px;
     margin-bottom: 28px;
   }
-  @media (max-width: 560px) { .services-grid { grid-template-columns: 1fr; } }
 
   .svc-card {
     background: var(--card);
@@ -686,6 +684,43 @@
     color: var(--white);
     font-weight: 600;
   }
+
+  /* MEDIA QUERIES APPAREILS MOBILES (COMPACTAGE DE L'ÉCRAN) */
+  @media (max-width: 600px) {
+    header .header-inner { padding: 12px 10px 8px; gap: 10px; }
+    header .logo-block { padding: 4px 12px; }
+    header .logo-drive { font-size: 26px; }
+    header .logo-clean { font-size: 13px; letter-spacing: 6px; }
+    header .tagline { font-size: 10px; padding-left: 8px; line-height: 1.3; }
+    header a[href="index.html"] { top: 8px; right: 10px; padding: 3px 8px; font-size: 11px; }
+    
+    .steps-nav .step-tab { padding: 8px 4px; font-size: 12px; letter-spacing: 0.5px; }
+    .steps-nav .step-tab .snum { font-size: 14px; margin-bottom: 0; }
+    
+    main { padding: 15px 12px 30px; }
+    .deco-stripe { margin-bottom: 12px; }
+    .section-title { font-size: 22px; }
+    .section-sub { font-size: 12px; margin-bottom: 15px; margin-top: 4px; }
+    
+    .vehicle-grid, .services-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px; }
+    .v-card, .svc-card { padding: 10px 8px; min-height: 90px; }
+    .v-card .vicon, .svc-card .sicon { font-size: 20px; margin-bottom: 2px; }
+    .v-card .vname, .svc-card .sname { font-size: 14px; letter-spacing: 0.5px; line-height: 1.1; }
+    .v-card .vdesc, .svc-card .sdesc { display: none; }
+    .v-card .vprice, .svc-card .sprice { position: static; display: block; font-size: 14px; margin-top: 4px; }
+    .checkmark { bottom: 6px; right: 6px; width: 14px; height: 14px; font-size: 8px; }
+    
+    .btn { padding: 10px 20px; font-size: 15px; width: 100%; justify-content: center; }
+    .total-bar { padding: 10px 14px; margin-bottom: 15px; }
+    .total-amount { font-size: 20px; }
+    
+    .calendar-wrap { padding: 12px; margin-bottom: 15px; }
+    .cal-month { font-size: 16px; }
+    .cal-nav { width: 28px; height: 28px; font-size: 14px; }
+    .cal-day { font-size: 11px; }
+    .time-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .time-slot { padding: 6px 2px; font-size: 14px; }
+  }
 </style>
 </head>
 <body>
@@ -729,7 +764,7 @@
   <div class="step-panel active" id="step-1">
     <div class="deco-stripe"></div>
     <div class="section-title">Select Vehicle</div>
-    <p class="section-sub">Vehicle type determines the base price of the service.</p>
+    <p class="section-sub">Vehicle type determines the base price.</p>
     <div class="vehicle-grid">
       <div class="v-card" data-vehicle="Compact / Sedan" data-price="0" onclick="selectVehicle(this)">
         <div class="vicon">🚗</div>
@@ -760,8 +795,8 @@
         <div class="checkmark">✓</div>
       </div>
     </div>
-    <div style="margin-bottom: 25px;">
-      <button class="btn btn-secondary" onclick="window.location.href='demande.html'" style="border-color: var(--cyan); color: var(--cyan);">
+    <div style="margin-bottom: 15px;">
+      <button class="btn btn-secondary" onclick="window.location.href='demande.html'" style="border-color: var(--cyan); color: var(--cyan); padding: 8px 10px; font-size: 13px;">
         ✨ Special Request / Custom Quote
       </button>
     </div>
@@ -774,7 +809,7 @@
   <div class="step-panel" id="step-2">
     <div class="deco-stripe"></div>
     <div class="section-title">Choose Services</div>
-    <p class="section-sub">Select one or more services to add to your booking.</p>
+    <p class="section-sub">Select your cleaning options.</p>
     <div class="services-grid">
       <div class="svc-card" data-service="Exterior Wash" data-price="45" onclick="toggleService(this)">
         <div class="sicon">✨</div>
@@ -792,7 +827,7 @@
       </div>
       <div class="svc-card" data-service="Tire Armorall Gloss" data-price="10" onclick="toggleService(this)">
         <div class="sicon">🔵</div>
-        <div class="sname">Tire Armorall Gloss</div>
+        <div class="sname">Armorall Tires</div>
         <div class="sdesc">Long-lasting shine tire protector</div>
         <div class="sprice">+10$</div>
         <div class="checkmark">✓</div>
@@ -806,20 +841,20 @@
       </div>
     </div>
     <div class="total-bar">
-      <span class="total-label">Estimated Subtotal</span>
+      <span class="total-label">Subtotal</span>
       <span class="total-amount" id="subtotal-display">0$</span>
     </div>
     <p class="error-msg" id="err-service">Please select at least one main service (Exterior Wash or Interior Cleaning).</p>
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goStep(1)">← Back</button>
+    <div class="btn-row" style="flex-direction: column; gap: 8px;">
       <button class="btn btn-primary" onclick="goStep(3)">Continue →</button>
+      <button class="btn btn-secondary" onclick="goStep(1)">← Back</button>
     </div>
   </div>
 
   <div class="step-panel" id="step-3">
     <div class="deco-stripe"></div>
-    <div class="section-title">Select a Date</div>
-    <p class="section-sub">Choose your preferred date for the appointment.</p>
+    <div class="section-title">Date &amp; Time</div>
+    <p class="section-sub">Select your time slot.</p>
     <div class="calendar-wrap">
       <div class="cal-header">
         <div class="cal-nav" onclick="prevMonth()">‹</div>
@@ -835,73 +870,43 @@
     </div>
 
     <p class="error-msg" id="err-date">Please select a date and a time slot.</p>
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goStep(2)">← Back</button>
+    <div class="btn-row" style="flex-direction: column; gap: 8px; margin-top: 15px;">
       <button class="btn btn-primary" onclick="goStep(4)">Continue →</button>
+      <button class="btn btn-secondary" onclick="goStep(2)">← Back</button>
     </div>
   </div>
 
   <div class="step-panel" id="step-4">
     <div class="deco-stripe"></div>
     <div class="section-title">Confirmation</div>
-    <p class="section-sub">Review your summary and enter your contact details.</p>
+    <p class="section-sub">Enter your details.</p>
 
-    <div class="recap-box">
-      <div class="recap-title">— SUMMARY —</div>
-      <div class="recap-row">
-        <span class="recap-key">Vehicle</span>
-        <span class="recap-val" id="r-vehicle">—</span>
-      </div>
-      <div class="recap-row">
-        <span class="recap-key">Services</span>
-        <span class="recap-val" id="r-services">—</span>
-      </div>
-      <div class="recap-row">
-        <span class="recap-key">Date</span>
-        <span class="recap-val" id="r-date">—</span>
-      </div>
-      <div class="recap-row recap-total">
-        <span class="recap-key">TOTAL</span>
-        <span class="recap-val" id="r-total">0$</span>
-      </div>
+    <div class="recap-box" style="padding: 12px; margin-bottom: 15px;">
+      <div class="recap-title" style="margin-bottom: 6px;">— SUMMARY —</div>
+      <div class="recap-row" style="padding: 4px 0;"><span class="recap-key">Vehicle</span><span class="recap-val" id="r-vehicle">—</span></div>
+      <div class="recap-row" style="padding: 4px 0;"><span class="recap-key">Services</span><span class="recap-val" id="r-services">—</span></div>
+      <div class="recap-row" style="padding: 4px 0;"><span class="recap-key">Date</span><span class="recap-val" id="r-date">—</span></div>
+      <div class="recap-row recap-total" style="padding: 6px 0;"><span class="recap-key">TOTAL</span><span class="recap-val" id="r-total" style="font-size: 18px;">0$</span></div>
     </div>
 
-    <div class="form-grid">
-      <div class="field-wrap">
-        <label class="field-label">First Name</label>
-        <input class="field-input" type="text" id="f-prenom" placeholder="John">
-      </div>
-      <div class="field-wrap">
-        <label class="field-label">Last Name</label>
-        <input class="field-input" type="text" id="f-nom" placeholder="Doe">
-      </div>
-      <div class="field-wrap">
-        <label class="field-label">Phone Number</label>
-        <input class="field-input" type="tel" id="f-tel" placeholder="514-555-0000">
-      </div>
-      <div class="field-wrap">
-        <label class="field-label">Email Address</label>
-        <input class="field-input" type="email" id="f-email" placeholder="john@email.com">
-      </div>
-      <div class="field-wrap form-full">
-        <label class="field-label">Service Address</label>
-        <input class="field-input" type="text" id="f-adresse" placeholder="123 Main Street, Montreal, QC">
-      </div>
+    <div class="form-grid" style="gap: 10px; margin-bottom: 15px;">
+      <div class="field-wrap"><label class="field-label">First Name</label><input class="field-input" type="text" id="f-prenom" style="padding: 8px;" placeholder="John"></div>
+      <div class="field-wrap"><label class="field-label">Last Name</label><input class="field-input" type="text" id="f-nom" style="padding: 8px;" placeholder="Doe"></div>
+      <div class="field-wrap"><label class="field-label">Phone</label><input class="field-input" type="tel" id="f-tel" style="padding: 8px;" placeholder="514-555-0000"></div>
+      <div class="field-wrap"><label class="field-label">Email</label><input class="field-input" type="email" id="f-email" style="padding: 8px;" placeholder="john@email.com"></div>
+      <div class="field-wrap form-full"><label class="field-label">Address</label><input class="field-input" type="text" id="f-adresse" style="padding: 8px;" placeholder="Address, Montreal, QC"></div>
     </div>
     <p class="error-msg" id="err-form">Please fill out all required fields.</p>
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goStep(3)">← Back</button>
+    <div class="btn-row" style="flex-direction: column; gap: 8px;">
       <button class="btn btn-confirm" onclick="openTermsModal()">Confirm Booking ✓</button>
+      <button class="btn btn-secondary" onclick="goStep(3)">← Back</button>
     </div>
   </div>
 
   <div class="step-panel" id="step-success">
     <div class="success-icon">✓</div>
-    <div class="success-title">Booking Confirmed!</div>
-    <p class="success-sub">
-      Your appointment request has been successfully saved.<br>
-      Our team will contact you within 24 hours to confirm the exact time slot.
-    </p>
+    <div class="success-title">Confirmed!</div>
+    <p class="success-sub">Our team will contact you within 24 hours.</p>
     <div class="success-detail" id="success-detail"></div>
     <button class="btn btn-primary" onclick="resetForm()">New Booking</button>
   </div>
@@ -910,42 +915,27 @@
 
 <div class="modal-overlay" id="terms-modal">
   <div class="modal-box">
-    <div class="modal-title">Terms of Service &amp; Liability Waiver</div>
+    <div class="modal-title">Terms &amp; Waiver</div>
     <div class="modal-content">
-      <p style="color: var(--white); font-weight: bold; margin-bottom: 10px;">By confirming your booking, you agree to the following terms:</p>
-      
-      <h4>1. General Waiver of Liability (Damages)</h4>
-      <p>Drive Clean disclaims all liability for indirect or unintentional property damage that may occur during the service. Drive Clean shall not be held responsible for damages related to pre-existing conditions of the vehicle (chipped paint, degraded clear coat, micro-cracks on windows or windshield, worn seals, loose bodywork elements). Cleaning components that are already fragile or modified is entirely at the client's risk.</p>
-      
-      <h4>2. Access to Public Utilities (Water and Electricity)</h4>
-      <p>The client expressly authorizes Drive Clean technicians to connect to and use external water sources and electricity outlets (standard plugs) available at the appointment location to execute the work. It is the client's responsibility to ensure these utilities are functional and safe.</p>
-      
-      <h4>3. Right to Unilateral Cancellation Without Notice</h4>
-      <p>Drive Clean reserves the absolute right to cancel, reschedule, or interrupt any appointment at any time for logistical, technical, safety, or weather-related reasons, without obligation to inform the client in advance and without any financial compensation being claimable.</p>
-      
-      <h4>4. Personal Items and Interior Valuables</h4>
-      <p>The client agrees to remove all valuables, money, electronic equipment, or confidential documents from the vehicle cabin before the technician's arrival. Drive Clean disclaims all liability for the loss, disappearance, or damage of items left inside the vehicle.</p>
-
-      <h4>5. Vehicle Condition and Biohazards</h4>
-      <p>Drive Clean reserves the right to refuse the vehicle or adjust the pricing on-site if the state of interior dirt poses a health risk (presence of mold, pet waste, biological fluids, pest infestations). No refund of deposit or travel fees will be granted in case of refusal.</p>
+      <p style="color: var(--white); font-weight: bold; margin-bottom: 10px;">By confirming, you agree to:</p>
+      <h4>1. Liability</h4><p>Drive Clean disclaims liability for property damage related to pre-existing conditions or wear.</p>
+      <h4>2. Utilities</h4><p>Client authorizes connection to external water and electrical outlets on site.</p>
+      <h4>3. Cancellation</h4><p>Drive Clean reserves the right to cancel or reschedule without notice for weather or logistics.</p>
+      <h4>4. Valuables</h4><p>Please remove all interior valuables before the arrival of our technician.</p>
     </div>
-    
     <label class="checkbox-wrap">
       <input type="checkbox" id="agree-checkbox" onchange="toggleConfirmButton()">
-      <span class="checkbox-label" style="color: var(--cyan);">I declare that I am the owner of the vehicle (or duly authorized) and I accept this liability waiver in its entirety.</span>
+      <span class="checkbox-label" style="color: var(--cyan); font-size: 12px;">I accept this liability waiver in its entirety.</span>
     </label>
-    
-    <p class="error-msg" id="err-modal-check" style="margin-bottom: 15px;">Please check the box to accept the terms and finalize your booking.</p>
-
-    <div class="btn-row" style="justify-content: flex-end;">
-      <button class="btn btn-secondary" onclick="closeTermsModal()" style="padding: 10px 20px; font-size: 15px;">Decline</button>
-      <button class="btn btn-confirm" id="modal-submit-btn" onclick="processFinalBooking()" style="padding: 10px 24px; font-size: 15px; opacity: 0.5; cursor: not-allowed;" disabled>I Accept and Confirm ✓</button>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="closeTermsModal()">Decline</button>
+      <button class="btn btn-confirm" id="modal-submit-btn" onclick="processFinalBooking()" disabled>Confirm ✓</button>
     </div>
   </div>
 </div>
 
 <footer>
-  <span>Drive Clean</span> &mdash; Mobile Car Wash &mdash; Montreal &mdash; 2026
+  <span>Drive Clean</span> &mdash; Montreal &mdash; 2026
 </footer>
 
 <script>
@@ -1055,23 +1045,18 @@
     document.getElementById('err-date').classList.remove('show');
     
     const grid = document.getElementById('time-grid');
-    grid.innerHTML = '<div style="grid-column: 1/-1; color: var(--gray); font-size: 14px;">Checking slot availability...</div>';
+    grid.innerHTML = '<div style="grid-column: 1/-1; color: var(--gray); font-size: 13px;">Checking...</div>';
     
     const ts = document.getElementById('time-section');
     ts.style.display = 'block';
-    ts.style.animation = 'fadeIn 0.3s ease';
 
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/reservations?date_rdv=eq.${dateStr}`, {
         method: 'GET',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json'
-        }
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' }
       });
 
-      if (!res.ok) throw new Error('Unable to load available slots');
+      if (!res.ok) throw new Error('Error');
 
       const reservationsExistantes = await res.json();
       const journeeBloquee = reservationsExistantes.some(r => r.heure_rdv === 'JOURNÉE');
@@ -1086,7 +1071,7 @@
 
     } catch (error) {
       console.error(error);
-      grid.innerHTML = '<div style="grid-column: 1/-1; color: var(--magenta); font-size: 14px;">Network error. Please retry.</div>';
+      grid.innerHTML = '<div style="grid-column: 1/-1; color: var(--magenta); font-size: 13px;">Network error.</div>';
     }
   }
 
@@ -1119,9 +1104,7 @@
   }
 
   function prevMonth() {
-    if (state.calYear === START_YEAR && state.calMonth === START_MONTH) {
-      return;
-    }
+    if (state.calYear === START_YEAR && state.calMonth === START_MONTH) return;
     state.calMonth--;
     if (state.calMonth < 0) { state.calMonth = 11; state.calYear--; }
     state.date = null; state.time = null;
@@ -1132,15 +1115,8 @@
   function nextMonth() {
     let targetMonth = START_MONTH + 1;
     let targetYear = START_YEAR;
-    if (targetMonth > 11) {
-      targetMonth = 0;
-      targetYear++;
-    }
-
-    if (state.calYear === targetYear && state.calMonth === targetMonth) {
-      return;
-    }
-
+    if (targetMonth > 11) { targetMonth = 0; targetYear++; }
+    if (state.calYear === targetYear && state.calMonth === targetMonth) return;
     state.calMonth++;
     if (state.calMonth > 11) { state.calMonth = 0; state.calYear++; }
     state.date = null; state.time = null;
@@ -1164,7 +1140,6 @@
       return;
     }
     
-    // MANDATORY BASE SERVICES CHECK: Locks step 2 if no core wash is selected
     if (n === 3) {
       const aServiceDeBase = state.services.some(s => s.name === "Exterior Wash" || s.name === "Interior Cleaning");
       if (!aServiceDeBase) {
@@ -1178,9 +1153,7 @@
       return;
     }
 
-    if (n === 4) {
-      updateRecap();
-    }
+    if (n === 4) updateRecap();
 
     document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
@@ -1209,8 +1182,6 @@
 
     document.getElementById('agree-checkbox').checked = false;
     toggleConfirmButton();
-    document.getElementById('err-modal-check').classList.remove('show');
-
     document.getElementById('terms-modal').classList.add('show');
   }
 
@@ -1221,12 +1192,10 @@
   function toggleConfirmButton() {
     const isChecked = document.getElementById('agree-checkbox').checked;
     const btn = document.getElementById('modal-submit-btn');
-    
     if (isChecked) {
       btn.disabled = false;
       btn.style.opacity = '1';
       btn.style.cursor = 'pointer';
-      document.getElementById('err-modal-check').classList.remove('show');
     } else {
       btn.disabled = true;
       btn.style.opacity = '0.5';
@@ -1235,14 +1204,7 @@
   }
 
   async function processFinalBooking() {
-    const isChecked = document.getElementById('agree-checkbox').checked;
-    if (!isChecked) {
-      document.getElementById('err-modal-check').classList.add('show');
-      return;
-    }
-
     closeTermsModal();
-
     const prenom = document.getElementById('f-prenom').value.trim();
     const nom = document.getElementById('f-nom').value.trim();
     const telephone = document.getElementById('f-tel').value.trim();
@@ -1251,85 +1213,42 @@
     const total = state.vehiclePrice + state.servicesTotal;
     const servicesText = state.services.map(s => s.name).join(', ');
 
-    const payload = {
-      prenom,
-      nom,
-      telephone,
-      email,
-      adresse,
-      vehicule: state.vehicle,
-      services: servicesText,
-      date_rdv: state.date,
-      heure_rdv: state.time,
-      total: total
-    };
+    const payload = { prenom, nom, telephone, email, adresse, vehicule: state.vehicle, services: servicesText, date_rdv: state.date, heure_rdv: state.time, total: total };
 
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/reservations`, {
         method: 'POST',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=representation'
-        },
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify(payload)
       });
 
-      if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(errText);
-      }
+      if (!res.ok) throw new Error('Error');
 
       document.getElementById('success-detail').innerHTML = `
         <strong>Customer:</strong> ${prenom} ${nom}<br>
-        <strong>Phone:</strong> ${telephone}<br>
         <strong>Appointment:</strong> ${state.date} — ${state.time}<br>
-        <strong>Vehicle Type:</strong> ${state.vehicle}<br>
-        <strong>Services Selected:</strong> ${servicesText}<br>
         <strong>Location:</strong> ${adresse}<br>
-        <strong>Amount Due:</strong> ${total}$
+        <strong>Total:</strong> ${total}$
       `;
-
       document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
       document.getElementById('step-success').classList.add('active');
-
     } catch (error) {
-      console.error(error);
-      alert("An error occurred while saving your booking request. Please try again.");
+      alert("An error occurred.");
     }
   }
 
   function resetForm() {
-    state.vehicle = null;
-    state.vehiclePrice = 0;
-    state.services = [];
-    state.servicesTotal = 0;
-    state.date = null;
-    state.time = null;
-    state.calYear = new Date().getFullYear();
-    state.calMonth = new Date().getMonth();
-
+    state.vehicle = null; state.vehiclePrice = 0; state.services = []; state.servicesTotal = 0; state.date = null; state.time = null;
     document.querySelectorAll('.v-card').forEach(c => c.classList.remove('selected'));
     document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
     document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('done', 'active'));
-
-    document.getElementById('f-prenom').value = '';
-    document.getElementById('f-nom').value = '';
-    document.getElementById('f-tel').value = '';
-    document.getElementById('f-email').value = '';
-    document.getElementById('f-adresse').value = '';
-
-    updateSubtotal();
-    buildCalendar();
+    document.getElementById('f-prenom').value = ''; document.getElementById('f-nom').value = ''; document.getElementById('f-tel').value = ''; document.getElementById('f-email').value = ''; document.getElementById('f-adresse').value = '';
+    updateSubtotal(); buildCalendar();
     document.getElementById('time-section').style.display = 'none';
     goStep(1);
   }
 
-  window.onload = function() {
-    buildCalendar();
-  };
+  window.onload = function() { buildCalendar(); };
 </script>
-
 </body>
 </html>
