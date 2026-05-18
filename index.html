@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drive Clean — Prise de RDV</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan: #00C8FF;
+    --magenta: #FF2D78;
+    --dark: #0D0D1A;
+    --darker: #07070F;
+    --mid: #1A1A2E;
+    --card: #12122A;
+    --white: #FFFFFF;
+    --gray: #8888AA;
+    --yellow: #FFD600;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--darker);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SCANLINES */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--dark);
+    border-bottom: 3px solid var(--cyan);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: repeating-linear-gradient(90deg, var(--magenta) 0px, var(--magenta) 20px, var(--cyan) 20px, var(--cyan) 40px);
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 28px 20px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .logo-block {
+    background: var(--mid);
+    border: 2px solid var(--white);
+    outline: 3px solid var(--cyan);
+    outline-offset: -5px;
+    padding: 8px 22px;
+    position: relative;
+  }
+  .logo-block::before, .logo-block::after {
+    content: '';
+    position: absolute;
+    width: 10px; height: 10px;
+  }
+  .logo-block::before { top: -3px; left: -3px; border-top: 3px solid var(--magenta); border-left: 3px solid var(--magenta); }
+  .logo-block::after { bottom: -3px; right: -3px; border-bottom: 3px solid var(--magenta); border-right: 3px solid var(--magenta); }
+  .logo-drive {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 2px;
+    color: var(--white);
+    line-height: 1;
+    -webkit-text-stroke: 1px var(--cyan);
+  }
+  .logo-clean {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 12px;
+    color: var(--magenta);
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .tagline {
+    font-size: 13px;
+    color: var(--gray);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-left: 2px solid var(--cyan);
+    padding-left: 14px;
+    line-height: 1.6;
+  }
+  .tagline span { color: var(--cyan); display: block; }
+
+  /* STEPS NAV */
+  .steps-nav {
+    background: var(--mid);
+    border-bottom: 2px solid var(--magenta);
+    padding: 0;
+  }
+  .steps-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+  }
+  .step-tab {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: var(--gray);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+    user-select: none;
+  }
+  .step-tab:last-child { border-right: none; }
+  .step-tab .snum {
+    display: block;
+    font-size: 22px;
+    color: rgba(255,255,255,0.1);
+    line-height: 1;
+    margin-bottom: 2px;
+    transition: color 0.2s;
+  }
+  .step-tab.active {
+    color: var(--white);
+    background: rgba(0,200,255,0.08);
+  }
+  .step-tab.active .snum { color: var(--cyan); }
+  .step-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--cyan);
+  }
+  .step-tab.done { color: var(--cyan); }
+  .step-tab.done .snum { color: var(--cyan); opacity: 0.5; }
+
+  /* MAIN */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 36px 20px 60px;
+  }
+
+  .step-panel { display: none; }
+  .step-panel.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 3px;
+    color: var(--white);
+    margin-bottom: 6px;
+    position: relative;
+    display: inline-block;
+  }
+  .section-title::after {
+    content: '';
+    display: block;
+    height: 3px;
+    background: var(--magenta);
+    margin-top: 4px;
+  }
+  .section-sub {
+    color: var(--gray);
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-bottom: 28px;
+    margin-top: 8px;
+  }
+
+  /* VEHICLE CARDS */
+  .vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+  @media (max-width: 560px) { .vehicle-grid { grid-template-columns: 1fr; } }
+
+  .v-card {
+    background: var(--card);
+    border: 2px solid rgba(255,255,255,0.1);
+    padding: 18px 20px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .v-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--gray);
+    transition: background 0.2s;
+  }
+  .v-card:hover { border-color: rgba(0,200,255,0.4); }
+  .v-card.selected { border-color: var(--cyan); background: rgba(0,200,255,0.06); }
+  .v-card.selected::before { background: var(--cyan); }
+  .v-card .vicon { font-size: 30px; margin-bottom: 8px; line-height: 1; }
+  .v-card .vname {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+  .v-card .vdesc { font-size: 12px; color: var(--gray); margin-top: 3px; letter-spacing: 0.5px; }
+  .v-card .vprice {
+    position: absolute;
+    top: 16px; right: 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--cyan);
+    letter-spacing: 1px;
+  }
+  .v-card.selected .vprice { color: var(--yellow); }
+  .checkmark {
+    position: absolute;
+    bottom: 12px; right: 14px;
+    width: 20px; height: 20px;
+    border: 2px solid var(--gray);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: transparent;
+    transition: all 0.2s;
+  }
+  .v-card.selected .checkmark {
+    background: var(--cyan);
+    border-color: var(--cyan);
+    color: var(--dark);
+  }
+
+  /* SERVICES */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 560px) { .services-grid { grid-template-columns: 1fr; } }
+
+  .svc-card {
+    background: var(--card);
+    border: 2px solid rgba(255,255,255,0.1);
+    padding: 18px 20px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .svc-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--gray);
+    transition: background 0.2s;
+  }
+  .svc-card:hover { border-color: rgba(255,45,120,0.4); }
+  .svc-card.selected { border-color: var(--magenta); background: rgba(255,45,120,0.06); }
+  .svc-card.selected::before { background: var(--magenta); }
+  .svc-card .sicon { font-size: 26px; margin-bottom: 6px; }
+  .svc-card .sname {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+  .svc-card .sdesc { font-size: 12px; color: var(--gray); margin-top: 3px; }
+  .svc-card .sprice {
+    position: absolute;
+    top: 14px; right: 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--magenta);
+    letter-spacing: 1px;
+  }
+  .svc-card .checkmark { border-color: var(--gray); }
+  .svc-card.selected .checkmark { background: var(--magenta); border-color: var(--magenta); color: var(--dark); }
+
+  /* TOTALS BAR */
+  .total-bar {
+    background: var(--mid);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-left: 4px solid var(--yellow);
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+  .total-label {
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+  .total-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--yellow);
+    letter-spacing: 2px;
+  }
+
+  /* CALENDAR */
+  .calendar-wrap {
+    background: var(--card);
+    border: 2px solid rgba(255,255,255,0.1);
+    padding: 24px;
+    margin-bottom: 28px;
+    max-width: 420px;
+  }
+  .cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .cal-nav {
+    background: var(--mid);
+    border: 2px solid rgba(255,255,255,0.15);
+    color: var(--cyan);
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.2s;
+  }
+  .cal-nav:hover { background: var(--cyan); color: var(--dark); }
+  .cal-month {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--white);
+    text-align: center;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .cal-day-name {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--gray);
+    padding: 4px 0 8px;
+    font-weight: 600;
+  }
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    color: var(--white);
+  }
+  .cal-day:hover:not(.empty):not(.past) { border-color: var(--cyan); color: var(--cyan); }
+  .cal-day.empty { cursor: default; }
+  .cal-day.past { color: rgba(255,255,255,0.2); cursor: default; }
+  .cal-day.today { color: var(--yellow); border-color: rgba(255,214,0,0.3); }
+  .cal-day.selected { background: var(--cyan); color: var(--dark); border-color: var(--cyan); font-weight: 700; }
+
+  /* TIME SLOTS */
+  .time-section {
+    margin-top: 20px;
+    max-width: 420px;
+  }
+  .time-section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 3px;
+    color: var(--magenta);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .time-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,45,120,0.3);
+  }
+  .time-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .time-slot {
+    background: var(--card);
+    border: 2px solid rgba(255,255,255,0.1);
+    padding: 10px 4px;
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 17px;
+    letter-spacing: 1px;
+    color: var(--white);
+    transition: all 0.15s;
+    position: relative;
+  }
+  .time-slot:hover:not(.unavailable) {
+    border-color: var(--magenta);
+    color: var(--magenta);
+  }
+  .time-slot.selected {
+    background: var(--magenta);
+    border-color: var(--magenta);
+    color: var(--white);
+  }
+  .time-slot.unavailable {
+    color: rgba(255,255,255,0.18);
+    cursor: default;
+    border-color: transparent;
+    text-decoration: line-through;
+  }
+  .time-slot .ampm {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    margin-top: 1px;
+  }
+  .time-slot.selected .ampm { opacity: 1; }
+
+  /* FORM */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+  .form-full { grid-column: 1 / -1; }
+
+  .field-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .field-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+  .field-input {
+    background: var(--card);
+    border: 2px solid rgba(255,255,255,0.1);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    border-left: 4px solid var(--gray);
+  }
+  .field-input:focus {
+    border-color: var(--cyan);
+    border-left-color: var(--cyan);
+  }
+  .field-input::placeholder { color: rgba(255,255,255,0.2); }
+
+  /* RECAP */
+  .recap-box {
+    background: var(--card);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-top: 4px solid var(--cyan);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .recap-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 3px;
+    color: var(--cyan);
+    margin-bottom: 14px;
+  }
+  .recap-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+  .recap-row:last-child { border-bottom: none; }
+  .recap-key { color: var(--gray); }
+  .recap-val { color: var(--white); font-weight: 600; }
+  .recap-total .recap-key { color: var(--yellow); font-weight: 700; font-size: 15px; }
+  .recap-total .recap-val {
+    color: var(--yellow);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 2px;
+  }
+
+  /* BUTTONS */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    padding: 14px 32px;
+    border: 2px solid;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary {
+    background: var(--cyan);
+    border-color: var(--cyan);
+    color: var(--dark);
+  }
+  .btn-primary:hover { background: var(--white); border-color: var(--white); }
+  .btn-secondary {
+    background: transparent;
+    border-color: rgba(255,255,255,0.2);
+    color: var(--gray);
+  }
+  .btn-secondary:hover { border-color: var(--white); color: var(--white); }
+  .btn-confirm {
+    background: var(--magenta);
+    border-color: var(--magenta);
+    color: var(--white);
+  }
+  .btn-confirm:hover { background: #FF005A; border-color: #FF005A; }
+
+  /* ERROR */
+  .error-msg {
+    color: var(--magenta);
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  /* SUCCESS */
+  #step-success {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .success-icon {
+    width: 80px; height: 80px;
+    border: 3px solid var(--cyan);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    margin: 0 auto 28px;
+    animation: popIn 0.5s ease;
+  }
+  @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .success-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 4px;
+    color: var(--cyan);
+    margin-bottom: 12px;
+  }
+  .success-sub {
+    color: var(--gray);
+    font-size: 15px;
+    letter-spacing: 1px;
+    line-height: 1.7;
+    margin-bottom: 30px;
+  }
+  .success-detail {
+    display: inline-block;
+    background: var(--card);
+    border: 2px solid rgba(0,200,255,0.3);
+    border-left: 4px solid var(--cyan);
+    padding: 16px 28px;
+    font-size: 14px;
+    color: var(--white);
+    letter-spacing: 1px;
+    line-height: 1.8;
+    text-align: left;
+    margin-bottom: 32px;
+  }
+
+  /* DECO STRIPE */
+  .deco-stripe {
+    height: 4px;
+    background: repeating-linear-gradient(90deg, var(--magenta) 0px, var(--magenta) 14px, var(--cyan) 14px, var(--cyan) 28px);
+    margin-bottom: 28px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-block">
+      <div class="logo-drive">DRIVE</div>
+      <div class="logo-clean">CLEAN</div>
+    </div>
+    <div class="tagline">
+      <span>Lavage Auto Mobile</span>
+      On vient à vous — partout à Montréal
+    </div>
+  </div>
+</header>
+
+<nav class="steps-nav">
+  <div class="steps-inner">
+    <div class="step-tab active" id="tab-1">
+      <span class="snum">01</span>VÉHICULE
+    </div>
+    <div class="step-tab" id="tab-2">
+      <span class="snum">02</span>SERVICES
+    </div>
+    <div class="step-tab" id="tab-3">
+      <span class="snum">03</span>DATE
+    </div>
+    <div class="step-tab" id="tab-4">
+      <span class="snum">04</span>CONFIRM.
+    </div>
+  </div>
+</nav>
+
+<main>
+
+  <div class="step-panel active" id="step-1">
+    <div class="deco-stripe"></div>
+    <div class="section-title">Quel véhicule ?</div>
+    <p class="section-sub">Le type de véhicule détermine le tarif de base du service.</p>
+    <div class="vehicle-grid">
+      <div class="v-card" data-vehicle="Compacte / Berline" data-price="0" onclick="selectVehicle(this)">
+        <div class="vicon">🚗</div>
+        <div class="vname">Compacte / Berline</div>
+        <div class="vdesc">Citadine, coupé, berline standard</div>
+        <div class="vprice">+0$</div>
+        <div class="checkmark">✓</div>
+      </div>
+      <div class="v-card" data-vehicle="SUV / 4×4" data-price="10" onclick="selectVehicle(this)">
+        <div class="vicon">🚙</div>
+        <div class="vname">SUV / 4×4</div>
+        <div class="vdesc">Tout-terrain, crossover, pickup</div>
+        <div class="vprice">+10$</div>
+        <div class="checkmark">✓</div>
+      </div>
+      <div class="v-card" data-vehicle="Monospace / Van" data-price="20" onclick="selectVehicle(this)">
+        <div class="vicon">🚐</div>
+        <div class="vname">Monospace / Van</div>
+        <div class="vdesc">Minivan, fourgonnette familiale</div>
+        <div class="vprice">+20$</div>
+        <div class="checkmark">✓</div>
+      </div>
+      <div class="v-card" data-vehicle="Utilitaire / Gros véhicule" data-price="30" onclick="selectVehicle(this)">
+        <div class="vicon">🚛</div>
+        <div class="vname">Utilitaire / Gros</div>
+        <div class="vdesc">Camion, véhicule commercial</div>
+        <div class="vprice">+30$</div>
+        <div class="checkmark">✓</div>
+      </div>
+    </div>
+    <p class="error-msg" id="err-vehicle">Veuillez sélectionner un type de véhicule.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goStep(2)">Continuer →</button>
+    </div>
+  </div>
+
+  <div class="step-panel" id="step-2">
+    <div class="deco-stripe"></div>
+    <div class="section-title">Vos services</div>
+    <p class="section-sub">Sélectionnez un ou plusieurs services à ajouter à votre réservation.</p>
+    <div class="services-grid">
+      <div class="svc-card" data-service="Lavage extérieur" data-price="45" onclick="toggleService(this)">
+        <div class="sicon">✨</div>
+        <div class="sname">Lavage extérieur</div>
+        <div class="sdesc">Carrosserie, vitres, jantes</div>
+        <div class="sprice">+45$</div>
+        <div class="checkmark">✓</div>
+      </div>
+      <div class="svc-card" data-service="Nettoyage intérieur" data-price="30" onclick="toggleService(this)">
+        <div class="sicon">🪑</div>
+        <div class="sname">Nettoyage intérieur</div>
+        <div class="sdesc">Aspirateur, tableau de bord, vitres</div>
+        <div class="sprice">+30$</div>
+        <div class="checkmark">✓</div>
+      </div>
+      <div class="svc-card" data-service="Armorall sur pneus" data-price="10" onclick="toggleService(this)">
+        <div class="sicon">🔵</div>
+        <div class="sname">Armorall sur pneus</div>
+        <div class="sdesc">Protecteur brillant pour pneus</div>
+        <div class="sprice">+10$</div>
+        <div class="checkmark">✓</div>
+      </div>
+      <div class="svc-card" data-service="Nettoyage du coffre" data-price="10" onclick="toggleService(this)">
+        <div class="sicon">📦</div>
+        <div class="sname">Nettoyage du coffre</div>
+        <div class="sdesc">Aspirateur et nettoyage complet</div>
+        <div class="sprice">+10$</div>
+        <div class="checkmark">✓</div>
+      </div>
+    </div>
+    <div class="total-bar">
+      <span class="total-label">Sous-total estimé</span>
+      <span class="total-amount" id="subtotal-display">0$</span>
+    </div>
+    <p class="error-msg" id="err-service">Veuillez sélectionner au moins un service.</p>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(1)">← Retour</button>
+      <button class="btn btn-primary" onclick="goStep(3)">Continuer →</button>
+    </div>
+  </div>
+
+  <div class="step-panel" id="step-3">
+    <div class="deco-stripe"></div>
+    <div class="section-title">Choisissez une date</div>
+    <p class="section-sub">Sélectionnez la date souhaitée pour votre rendez-vous.</p>
+    <div class="calendar-wrap">
+      <div class="cal-header">
+        <div class="cal-nav" onclick="prevMonth()">‹</div>
+        <div class="cal-month" id="cal-month-label"></div>
+        <div class="cal-nav" onclick="nextMonth()">›</div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <div class="time-section" id="time-section" style="display:none">
+      <div class="time-section-title">— HEURE —</div>
+      <div class="time-grid" id="time-grid"></div>
+    </div>
+
+    <p class="error-msg" id="err-date">Veuillez sélectionner une date et une heure.</p>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(2)">← Retour</button>
+      <button class="btn btn-primary" onclick="goStep(4)">Continuer →</button>
+    </div>
+  </div>
+
+  <div class="step-panel" id="step-4">
+    <div class="deco-stripe"></div>
+    <div class="section-title">Confirmation</div>
+    <p class="section-sub">Vérifiez votre récapitulatif et renseignez vos informations.</p>
+
+    <div class="recap-box">
+      <div class="recap-title">— RÉCAPITULATIF —</div>
+      <div class="recap-row">
+        <span class="recap-key">Véhicule</span>
+        <span class="recap-val" id="r-vehicle">—</span>
+      </div>
+      <div class="recap-row">
+        <span class="recap-key">Services</span>
+        <span class="recap-val" id="r-services">—</span>
+      </div>
+      <div class="recap-row">
+        <span class="recap-key">Date</span>
+        <span class="recap-val" id="r-date">—</span>
+      </div>
+      <div class="recap-row recap-total">
+        <span class="recap-key">TOTAL</span>
+        <span class="recap-val" id="r-total">0$</span>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="field-wrap">
+        <label class="field-label">Prénom</label>
+        <input class="field-input" type="text" id="f-prenom" placeholder="Jean">
+      </div>
+      <div class="field-wrap">
+        <label class="field-label">Nom</label>
+        <input class="field-input" type="text" id="f-nom" placeholder="Tremblay">
+      </div>
+      <div class="field-wrap">
+        <label class="field-label">Téléphone</label>
+        <input class="field-input" type="tel" id="f-tel" placeholder="514-555-0000">
+      </div>
+      <div class="field-wrap">
+        <label class="field-label">Courriel</label>
+        <input class="field-input" type="email" id="f-email" placeholder="jean@email.com">
+      </div>
+      <div class="field-wrap form-full">
+        <label class="field-label">Adresse du rendez-vous</label>
+        <input class="field-input" type="text" id="f-adresse" placeholder="123 rue Principale, Montréal, QC">
+      </div>
+    </div>
+    <p class="error-msg" id="err-form">Veuillez remplir tous les champs obligatoires.</p>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(3)">← Retour</button>
+      <button class="btn btn-confirm" onclick="confirm()">Confirmer ma réservation ✓</button>
+    </div>
+  </div>
+
+  <div class="step-panel" id="step-success">
+    <div class="success-icon">✓</div>
+    <div class="success-title">Réservation confirmée !</div>
+    <p class="success-sub">
+      Votre rendez-vous a bien été enregistré.<br>
+      Notre équipe vous contactera sous 24h pour confirmer l'heure exacte.
+    </p>
+    <div class="success-detail" id="success-detail"></div>
+    <button class="btn btn-primary" onclick="reset()">Nouvelle réservation</button>
+  </div>
+
+</main>
+
+<footer>
+  <span>Drive Clean</span> &mdash; Lavage Auto Mobile &mdash; Montréal &mdash; 2026
+</footer>
+
+<script>
+  let state = {
+    vehicle: null,
+    vehiclePrice: 0,
+    services: [],
+    servicesTotal: 0,
+    date: null,
+    time: null,
+    calYear: new Date().getFullYear(),
+    calMonth: new Date().getMonth()
+  };
+
+  const TIME_SLOTS = [
+    { h: '8:00', ampm: 'AM' }, { h: '9:00', ampm: 'AM' }, { h: '10:00', ampm: 'AM' }, { h: '11:00', ampm: 'AM' },
+    { h: '12:00', ampm: 'PM' }, { h: '13:00', ampm: 'PM' }, { h: '14:00', ampm: 'PM' }, { h: '15:00', ampm: 'PM' },
+    { h: '16:00', ampm: 'PM' }, { h: '17:00', ampm: 'PM' }, { h: '18:00', ampm: 'PM' }, { h: '19:00', ampm: 'PM' }
+  ];
+
+  const MONTHS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const DAYS_FR = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+
+  const SUPABASE_URL = 'https://ezhljxnrlinvawdbjioz.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6aGxqeG5ybGludmF3ZGJqaW96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MDMwMDUsImV4cCI6MjA5NDM3OTAwNX0.tFmlEhpt5rIDxG5F7AmUOhHSjwb3bNlrNUrx9niGBAw';
+
+  function selectVehicle(el) {
+    document.querySelectorAll('.v-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.vehicle = el.dataset.vehicle;
+    state.vehiclePrice = parseInt(el.dataset.price);
+    updateSubtotal();
+    document.getElementById('err-vehicle').classList.remove('show');
+  }
+
+  function toggleService(el) {
+    el.classList.toggle('selected');
+    const name = el.dataset.service;
+    const price = parseInt(el.dataset.price);
+    if (el.classList.contains('selected')) {
+      state.services.push({ name, price });
+    } else {
+      state.services = state.services.filter(s => s.name !== name);
+    }
+    updateSubtotal();
+    document.getElementById('err-service').classList.remove('show');
+  }
+
+  function updateSubtotal() {
+    state.servicesTotal = state.services.reduce((a, s) => a + s.price, 0);
+    const total = state.vehiclePrice + state.servicesTotal;
+    document.getElementById('subtotal-display').textContent = total + '$';
+  }
+
+  function buildCalendar() {
+    const grid = document.getElementById('cal-grid');
+    const label = document.getElementById('cal-month-label');
+    label.textContent = MONTHS_FR[state.calMonth] + ' ' + state.calYear;
+    grid.innerHTML = '';
+
+    DAYS_FR.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-day-name';
+      el.textContent = d;
+      grid.appendChild(el);
+    });
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const firstDay = new Date(state.calYear, state.calMonth, 1).getDay();
+    const daysInMonth = new Date(state.calYear, state.calMonth + 1, 0).getDate();
+
+    for (let i = 0; i < firstDay; i++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day empty';
+      grid.appendChild(el);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const el = document.createElement('div');
+      const date = new Date(state.calYear, state.calMonth, d);
+      date.setHours(0,0,0,0);
+      el.className = 'cal-day';
+      el.textContent = d;
+      if (date < today) {
+        el.classList.add('past');
+      } else {
+        if (date.getTime() === today.getTime()) el.classList.add('today');
+        const dateStr = date.toLocaleDateString('fr-CA');
+        if (state.date === dateStr) el.classList.add('selected');
+        el.onclick = () => selectDate(d, dateStr, el);
+      }
+      grid.appendChild(el);
+    }
+  }
+
+  async function selectDate(day, dateStr, el) {
+    document.querySelectorAll('.cal-day').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.date = dateStr;
+    state.time = null;
+    document.getElementById('err-date').classList.remove('show');
+    
+    const grid = document.getElementById('time-grid');
+    grid.innerHTML = '<div style="grid-column: 1/-1; color: var(--gray); font-size: 14px;">Vérification des disponibilités...</div>';
+    
+    const ts = document.getElementById('time-section');
+    ts.style.display = 'block';
+    ts.style.animation = 'fadeIn 0.3s ease';
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/reservations?date_rdv=eq.${dateStr}`, {
+        method: 'GET',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!res.ok) throw new Error('Impossible de charger les disponibilités');
+
+      const reservationsExistantes = await res.json();
+      
+      const journeeBloquee = reservationsExistantes.some(r => r.heure_rdv === 'JOURNÉE' || r.prenom === 'CONGÉ');
+
+      if (journeeBloquee) {
+        const toutesLesHeures = TIME_SLOTS.map(slot => slot.h + ' ' + slot.ampm);
+        buildTimeSlots(toutesLesHeures);
+      } else {
+        const heuresPrises = reservationsExistantes.map(r => r.heure_rdv);
+        buildTimeSlots(heuresPrises);
+      }
+
+    } catch (error) {
+      console.error(error);
+      grid.innerHTML = '<div style="grid-column: 1/-1; color: var(--magenta); font-size: 14px;">Erreur réseau. Réessayez.</div>';
+    }
+  }
+
+  function buildTimeSlots(heuresPrises = []) {
+    const grid = document.getElementById('time-grid');
+    grid.innerHTML = '';
+    
+    TIME_SLOTS.forEach((slot) => {
+      const el = document.createElement('div');
+      const formatHeureBdd = slot.h + ' ' + slot.ampm;
+      const estPris = heuresPrises.includes(formatHeureBdd);
+      
+      if (estPris) {
+        el.className = 'time-slot unavailable';
+        el.innerHTML = slot.h + '<span class="ampm">' + slot.ampm + '</span>';
+      } else {
+        el.className = 'time-slot';
+        el.innerHTML = slot.h + '<span class="ampm">' + slot.ampm + '</span>';
+        el.onclick = () => selectTime(formatHeureBdd, el);
+      }
+      grid.appendChild(el);
+    });
+  }
+
+  function selectTime(timeStr, el) {
+    document.querySelectorAll('.time-slot').forEach(t => t.classList.remove('selected'));
+    el.classList.add('selected');
+    state.time = timeStr;
+    document.getElementById('err-date').classList.remove('show');
+  }
+
+  function prevMonth() {
+    state.calMonth--;
+    if (state.calMonth < 0) { state.calMonth = 11; state.calYear--; }
+    state.date = null; state.time = null;
+    document.getElementById('time-section').style.display = 'none';
+    buildCalendar();
+  }
+
+  function nextMonth() {
+    state.calMonth++;
+    if (state.calMonth > 11) { state.calMonth = 0; state.calYear++; }
+    state.date = null; state.time = null;
+    document.getElementById('time-section').style.display = 'none';
+    buildCalendar();
+  }
+
+  function goStep(n) {
+    if (n === 2 && !state.vehicle) {
+      document.getElementById('err-vehicle').classList.add('show');
+      return;
+    }
+    if (n === 3 && state.services.length === 0) {
+      document.getElementById('err-service').classList.add('show');
+      return;
+    }
+    if (n === 4 && (!state.date || !state.time)) {
+      document.getElementById('err-date').classList.add('show');
+      return;
+    }
+
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.step-tab').forEach((t, i) => {
+      t.classList.remove('active', 'done');
+      if (i + 1 < n) t.classList.add('done');
+      if (i + 1 === n) t.classList.add('active');
+    });
+    document.getElementById('step-' + n).classList.add('active');
+
+    if (n === 4) fillRecap();
+  }
+
+  function fillRecap() {
+    const total = state.vehiclePrice + state.servicesTotal;
+    document.getElementById('r-vehicle').textContent = state.vehicle;
+    document.getElementById('r-services').textContent = state.services.map(s => s.name).join(', ') || '—';
+    document.getElementById('r-date').textContent = (state.date || '—') + (state.time ? ' — ' + state.time : '');
+    document.getElementById('r-total').textContent = total + '$';
+  }
+
+  async function confirm() {
+    const fields = ['f-prenom','f-nom','f-tel','f-email','f-adresse'];
+    const missing = fields.some(f => !document.getElementById(f).value.trim());
+    if (missing) {
+      document.getElementById('err-form').classList.add('show');
+      return;
+    }
+
+    const prenom = document.getElementById('f-prenom').value.trim();
+    const nom = document.getElementById('f-nom').value.trim();
+    const tel = document.getElementById('f-tel').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const adresse = document.getElementById('f-adresse').value.trim();
+    const total = state.vehiclePrice + state.servicesTotal;
+
+    const btn = document.querySelector('.btn-confirm');
+    btn.textContent = 'ENVOI EN COURS...';
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/reservations`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          prenom,
+          nom,
+          telephone: tel,
+          email,
+          adresse,
+          vehicule: state.vehicle,
+          services: state.services.map(s => s.name).join(', '),
+          date_rdv: state.date,
+          heure_rdv: state.time,
+          total
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Erreur serveur');
+      }
+
+      document.getElementById('success-detail').innerHTML =
+        `<strong>${prenom} ${nom}</strong><br>` +
+        `📅 ${state.date} — ${state.time}<br>` +
+        `📍 ${adresse}<br>` +
+        `🚗 ${state.vehicle}<br>` +
+        `✨ ${state.services.map(s=>s.name).join(', ')}<br>` +
+        `📞 ${tel}<br>` +
+        `<strong style="color:#FFD600">Total : ${total}$</strong>`;
+
+      document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.step-tab').forEach(t => { t.classList.remove('active'); t.classList.add('done'); });
+      document.getElementById('step-success').classList.add('active');
+
+    } catch (e) {
+      btn.textContent = 'Confirmer ma réservation ✓';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      const errEl = document.getElementById('err-form');
+      errEl.textContent = 'Erreur : ' + e.message;
+      errEl.classList.add('show');
+    }
+  }
+
+  function reset() {
+    state = { vehicle: null, vehiclePrice: 0, services: [], servicesTotal: 0, date: null, time: null, calYear: new Date().getFullYear(), calMonth: new Date().getMonth() };
+    document.querySelectorAll('.v-card, .svc-card').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.field-input').forEach(f => f.value = '');
+    document.querySelectorAll('.error-msg').forEach(e => e.classList.remove('show'));
+    document.getElementById('subtotal-display').textContent = '0$';
+    document.getElementById('time-section').style.display = 'none';
+    goStepDirect(1);
+    buildCalendar();
+  }
+
+  function goStepDirect(n) {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.step-tab').forEach((t, i) => {
+      t.classList.remove('active', 'done');
+      if (i + 1 === n) t.classList.add('active');
+    });
+    document.getElementById('step-' + n).classList.add('active');
+  }
+
+  buildCalendar();
+</script>
+<style>
+@media (max-width: 600px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 16px 16px;
+    gap: 12px;
+  }
+  .tagline {
+    border-left: none;
+    border-top: 2px solid var(--cyan);
+    padding-left: 0;
+    padding-top: 10px;
+    font-size: 11px;
+  }
+  .logo-drive { font-size: 34px; }
+  .logo-clean { font-size: 16px; letter-spacing: 8px; }
+
+  .step-tab { font-size: 11px; letter-spacing: 1px; padding: 10px 4px; }
+  .step-tab .snum { font-size: 16px; }
+
+  main { padding: 24px 14px 50px; }
+
+  .section-title { font-size: 26px; }
+
+  .vehicle-grid { grid-template-columns: 1fr; gap: 10px; }
+  .services-grid { grid-template-columns: 1fr; gap: 10px; }
+
+  .v-card, .svc-card { padding: 14px 16px; }
+  .v-card .vicon, .svc-card .sicon { font-size: 24px; }
+  .v-card .vname { font-size: 17px; }
+  .svc-card .sname { font-size: 17px; }
+
+  .calendar-wrap { padding: 16px; max-width: 100%; }
+  .cal-month { font-size: 18px; }
+  .cal-day { font-size: 12px; }
+  .cal-day-name { font-size: 10px; }
+
+  .time-section { max-width: 100%; }
+  .time-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .time-slot { font-size: 14px; padding: 9px 2px; }
+
+  .total-bar { padding: 12px 14px; }
+  .total-amount { font-size: 22px; }
+
+  .form-grid { grid-template-columns: 1fr; gap: 12px; }
+
+  .recap-box { padding: 14px; }
+  .recap-row { font-size: 13px; flex-direction: column; gap: 2px; }
+  .recap-val { text-align: left; }
+  .recap-total .recap-val { font-size: 20px; }
+
+  .btn-row { flex-direction: column; gap: 10px; }
+  .btn { width: 100%; justify-content: center; font-size: 16px; padding: 14px 20px; }
+
+  .success-icon { width: 64px; height: 64px; font-size: 28px; }
+  .success-title { font-size: 32px; }
+  .success-detail { padding: 14px 18px; font-size: 13px; text-align: left; }
+}
+</style>
+</body>
+</html>
