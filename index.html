@@ -976,6 +976,55 @@
   }
 
   window.onload = function() { buildCalendar(); };
+  // FONCTION DE COLLECTE DE DONNÉES ANALYTIQUES COMPATIBLE LOI 25
+async function trackVisitorAnalytics() {
+  try {
+    // 1. Collecte des données locales du navigateur
+    const analyticsPayload = {
+      page_url: window.location.pathname,
+      langue_navigateur: navigator.language || navigator.userLanguage,
+      provenance_plateforme: document.referrer || "Accès Direct / Code QR",
+      appareil_client: navigator.userAgent.substring(0, 250), // Limité pour la base de données
+      ecran_resolution: `${window.screen.width}x${window.screen.height}`,
+      ville: "Montréal (Estimé)", // Valeurs par défaut si non détecté
+      region: "Québec"
+    };
+
+    // 2. Récupération optionnelle de la géo-localisation IP via une API gratuite et respectueuse
+    try {
+      const geoRes = await fetch('https://ipapi.co/json/');
+      if (geoRes.ok) {
+        const geoData = await geoRes.json();
+        if(geoData.city) analyticsPayload.ville = geoData.city;
+        if(geoData.region) analyticsPayload.region = geoData.region;
+      }
+    } catch (e) {
+      console.log("Géolocalisation IP bloquée par le navigateur, utilisation des valeurs par défaut.");
+    }
+
+    // 3. Envoi sécurisé des données vers ta table Supabase
+    await fetch(`${SUPABASE_URL}/rest/v1/site_analytics`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(analyticsPayload)
+    });
+
+  } catch (error) {
+    // Échec silencieux pour ne jamais bloquer l'expérience utilisateur du client
+    console.error("Analytics Error:", error);
+  }
+}
+
+// Déclenchement automatique dès que la page est entièrement chargée
+window.addEventListener('DOMContentLoaded', () => {
+  // Un petit délai pour laisser le calendrier s'initialiser d'abord
+  setTimeout(trackVisitorAnalytics, 1500);
+});
 </script>
 </body>
 </html>
