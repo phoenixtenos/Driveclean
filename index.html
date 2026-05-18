@@ -906,7 +906,7 @@
       <span class="total-label">Sous-total Estimé</span>
       <span class="total-amount" id="subtotal-display">0$</span>
     </div>
-    <p class="error-msg" id="err-service">Veuillez sélectionner au moins un service.</p>
+    <p class="error-msg" id="err-service">Veuillez sélectionner au moins un service principal (Lavage Extérieur ou Nettoyage Intérieur).</p>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(1)">← Retour</button>
       <button class="btn btn-primary" onclick="goStep(3)">Continuer →</button>
@@ -1009,7 +1009,7 @@
   <div class="modal-box">
     <div class="modal-title">Conditions de Service &amp; Décharge de Responsabilité</div>
     <div class="modal-content">
-      <p style="color: var(--white); font-weight: bold; margin-bottom: 10px;">En confirming votre réservation, vous acceptez expressément les clauses contractuelles suivantes :</p>
+      <p style="color: var(--white); font-weight: bold; margin-bottom: 10px;">En confirmant votre réservation, vous acceptez expressément les clauses contractuelles suivantes :</p>
       
       <h4>1. Exonération Générale de Responsabilité (Dommages)</h4>
       <p>L'entreprise Drive Clean décline toute responsabilité pour tout dommage matériel indirect ou involontaire survenant lors de l'exécution de l'entretien. Drive Clean ne pourra être tenue responsable des bris liés à l'état d'usure préalable du véhicule (peinture écaillée, vernis dégradé, micro-fissures sur vitrages, joints desséchés, éléments de carrosserie mal fixés). Le nettoyage d'éléments fragilisés ou modifiés s'effectue aux risques exclusifs du client.</p>
@@ -1073,7 +1073,6 @@
   const SUPABASE_URL = 'https://ezhljxnrlinvawdbjioz.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6aGxqeG5ybGludmF3ZGJqaW96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MDMwMDUsImV4cCI6MjA5NDM3OTAwNX0.tFmlEhpt5rIDxG5F7AmUOhHSjwb3bNlrNUrx9niGBAw';
 
-  // Fonction pour fermer le pop-up de langue initial
   function closeLangPopup() {
     document.getElementById('initial-lang-popup').classList.add('hide');
   }
@@ -1265,10 +1264,16 @@
       document.getElementById('err-vehicle').classList.add('show');
       return;
     }
-    if (n === 3 && state.services.length === 0) {
-      document.getElementById('err-service').classList.add('show');
-      return;
+    
+    // VERROUILLAGE DES OPTIONS ACCESSOIRES : Obligation d'un service de base en étape 2
+    if (n === 3) {
+      const aServiceDeBase = state.services.some(s => s.name === "Lavage Extérieur" || s.name === "Nettoyage Intérieur");
+      if (!aServiceDeBase) {
+        document.getElementById('err-service').classList.add('show');
+        return;
+      }
     }
+    
     if (n === 4 && (!state.date || !state.time)) {
       document.getElementById('err-date').classList.add('show');
       return;
@@ -1298,7 +1303,7 @@
     const errForm = document.getElementById('err-form');
 
     if (!prenom || !nom || !telephone || !email || !adresse) {
-      errForm.classList.add('show');
+      document.getElementById('err-form').classList.add('show');
       return;
     }
     errForm.classList.remove('show');
