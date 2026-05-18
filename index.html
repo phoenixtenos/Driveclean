@@ -38,6 +38,89 @@
     z-index: 999;
   }
 
+  /* POP-UP SÉLECTEUR DE LANGUE INITIAL (SPLASH SCREEN) */
+  .lang-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--darker);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: opacity 0.4s ease, pointer-events 0.4s;
+  }
+  .lang-popup-overlay.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .lang-popup-box {
+    background: var(--dark);
+    border: 3px solid var(--cyan);
+    box-shadow: 0 0 30px rgba(0, 200, 255, 0.2);
+    padding: 40px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+  }
+  .lang-popup-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: repeating-linear-gradient(90deg, var(--magenta) 0px, var(--magenta) 20px, var(--cyan) 20px, var(--cyan) 40px);
+  }
+  .lang-popup-logo {
+    background: var(--mid);
+    border: 2px solid var(--white);
+    outline: 3px solid var(--cyan);
+    outline-offset: -5px;
+    padding: 10px 30px;
+    display: inline-block;
+    margin-bottom: 25px;
+  }
+  .lang-popup-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    color: var(--gray);
+  }
+  .lang-btn-row {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+  .lang-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    padding: 15px 35px;
+    border: 2px solid;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .lang-btn-fr {
+    background: var(--cyan);
+    border-color: var(--cyan);
+    color: var(--dark);
+  }
+  .lang-btn-fr:hover {
+    background: var(--white);
+    border-color: var(--white);
+  }
+  .lang-btn-en {
+    background: transparent;
+    border-color: var(--magenta);
+    color: var(--white);
+  }
+  .lang-btn-en:hover {
+    background: var(--magenta);
+    color: var(--white);
+  }
+
   /* HEADER */
   header {
     background: var(--dark);
@@ -690,6 +773,20 @@
 </head>
 <body>
 
+<div class="lang-popup-overlay" id="initial-lang-popup">
+  <div class="lang-popup-box">
+    <div class="lang-popup-logo">
+      <div style="font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--white); line-height: 1; -webkit-text-stroke: 1px var(--cyan);">DRIVE</div>
+      <div style="font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--magenta); line-height: 1; letter-spacing: 10px; margin-top: 2px;">CLEAN</div>
+    </div>
+    <div class="lang-popup-title">CHOOSE YOUR LANGUAGE / CHOISISSEZ VOTRE LANGUE</div>
+    <div class="lang-btn-row">
+      <button class="lang-btn lang-btn-fr" onclick="closeLangPopup()">FRANÇAIS</button>
+      <a href="index-en.html" class="lang-btn lang-btn-en">ENGLISH</a>
+    </div>
+  </div>
+</div>
+
 <header style="position: relative;">
   <a href="index-en.html" style="position: absolute; top: 15px; right: 20px; color: var(--cyan); border: 1px solid var(--cyan); padding: 5px 12px; font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 1px; text-decoration: none; transition: all 0.2s; box-shadow: 0 0 8px rgba(0,200,255,0.2); z-index: 10;">
     EN — ENGLISH
@@ -912,7 +1009,7 @@
   <div class="modal-box">
     <div class="modal-title">Conditions de Service &amp; Décharge de Responsabilité</div>
     <div class="modal-content">
-      <p style="color: var(--white); font-weight: bold; margin-bottom: 10px;">En confirmant votre réservation, vous acceptez expressément les clauses contractuelles suivantes :</p>
+      <p style="color: var(--white); font-weight: bold; margin-bottom: 10px;">En confirming votre réservation, vous acceptez expressément les clauses contractuelles suivantes :</p>
       
       <h4>1. Exonération Générale de Responsabilité (Dommages)</h4>
       <p>L'entreprise Drive Clean décline toute responsabilité pour tout dommage matériel indirect ou involontaire survenant lors de l'exécution de l'entretien. Drive Clean ne pourra être tenue responsable des bris liés à l'état d'usure préalable du véhicule (peinture écaillée, vernis dégradé, micro-fissures sur vitrages, joints desséchés, éléments de carrosserie mal fixés). Le nettoyage d'éléments fragilisés ou modifiés s'effectue aux risques exclusifs du client.</p>
@@ -975,6 +1072,11 @@
 
   const SUPABASE_URL = 'https://ezhljxnrlinvawdbjioz.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6aGxqeG5ybGludmF3ZGJqaW96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MDMwMDUsImV4cCI6MjA5NDM3OTAwNX0.tFmlEhpt5rIDxG5F7AmUOhHSjwb3bNlrNUrx9niGBAw';
+
+  // Fonction pour fermer le pop-up de langue initial
+  function closeLangPopup() {
+    document.getElementById('initial-lang-popup').classList.add('hide');
+  }
 
   function selectVehicle(el) {
     document.querySelectorAll('.v-card').forEach(c => c.classList.remove('selected'));
