@@ -31,7 +31,6 @@
     padding: 20px;
   }
 
-  /* Boîte d'authentification */
   .admin-box {
     background: var(--card);
     border: 2px dashed var(--magenta);
@@ -105,7 +104,6 @@
     letter-spacing: 0.5px;
   }
 
-  /* Zone des contrôles cachée au départ */
   #admin-controls-zone {
     display: none;
     width: 100%;
@@ -113,6 +111,7 @@
     background: var(--card);
     border: 2px solid var(--cyan);
     padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.1);
   }
   
   .controls-title {
@@ -123,6 +122,7 @@
     margin-bottom: 20px;
     border-bottom: 2px solid var(--cyan);
     padding-bottom: 5px;
+    text-align: center;
   }
 
   .row-grid {
@@ -135,7 +135,7 @@
     width: 100%;
     height: 48px;
     cursor: pointer;
-    -webkit-appearance: none;
+    appearance: revert;
   }
 </style>
 </head>
@@ -145,14 +145,14 @@
     <div class="admin-title">🛠️ DRIVE CLEAN — <span>PANEL ADMIN</span></div>
     <div class="field-wrap">
       <label class="field-label">Code Secret Admin</label>
-      <input class="field-input" type="password" id="admin-pass-input" placeholder="••••••••">
+      <input class="field-input" type="password" id="admin-pass-input" placeholder="Entrez votre mot de passe">
     </div>
     <button class="btn btn-primary" onclick="verifierMotDePasseAdmin()">Connexion 🔑</button>
     <div id="admin-status"></div>
   </div>
 
   <div id="admin-controls-zone">
-    <div class="controls-title">⚙️ Gestion du Calendrier</div>
+    <div class="controls-title">⚙️ GESTION DU CALENDRIER</div>
     
     <div class="row-grid">
       <div class="field-wrap">
@@ -167,7 +167,7 @@
 
     <div class="field-wrap">
       <label class="field-label">Plage Horaire à Bloquer</label>
-      <select class="field-input" id="admin-heure-choix">
+      <select class="field-input" id="admin-heure-choix" style="color: var(--white); background: var(--dark);">
         <option value="JOURNÉE">Bloquer la Journée Complète (Congé)</option>
         <option value="8:00 AM">8:00 AM</option>
         <option value="9:00 AM">9:00 AM</option>
@@ -192,29 +192,12 @@
   const SUPABASE_URL = 'https://ezhljxnrlinvawdbjioz.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6aGxqeG5ybGludmF3ZGJqaW96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MDMwMDUsImV4cCI6MjA5NDM3OTAwNX0.tFmlEhpt5rIDxG5F7AmUOhHSjwb3bNlrNUrx9niGBAw';
 
-  // Algorithme de hachage léger et indépendant
-  function cyrb256(str) {
-    let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
-    for (let i = 0, ch; i < str.length; i++) {
-      ch = str.charCodeAt(i);
-      h1 = Math.imul(h1 ^ ch, 2654435761);
-      h2 = Math.imul(h2 ^ ch, 1597334677);
-    }
-    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-    return ((h2 >>> 0).toString(16).padStart(8, '0') + (h1 >>> 0).toString(16).padStart(8, '0'));
-  }
-
   function verifierMotDePasseAdmin() {
     const passSaisi = document.getElementById('admin-pass-input').value.trim();
     const statusEl = document.getElementById('admin-status');
     
-    // Vérification de l'empreinte de "Adamch2024.."
-    const hashSaisi = cyrb256(passSaisi);
-    const hashCorrect = "86dfd5b08c2a41ab"; 
-    
-    if (hashSaisi === hashCorrect) { 
-      // Cache la connexion et montre les outils de blocage
+    // Vérification directe et sans faille
+    if (passSaisi === 'Adamch2024..') { 
       document.getElementById('admin-auth-zone').style.display = 'none';
       document.getElementById('admin-controls-zone').style.display = 'block';
     } else {
@@ -223,7 +206,7 @@
     }
   }
 
-  // Écouter la touche Entrée pour se connecter plus vite
+  // Permet de valider avec la touche Entrée
   document.getElementById('admin-pass-input').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
       verifierMotDePasseAdmin();
@@ -279,7 +262,7 @@
           })
         });
       } catch (e) {
-        console.error("Erreur d'insertion pour la date : " + dateStr, e);
+        console.error("Erreur d'insertion : " + dateStr, e);
       }
 
       dateDebut.setDate(dateDebut.getDate() + 1);
