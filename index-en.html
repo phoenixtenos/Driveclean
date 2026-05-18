@@ -28,7 +28,7 @@
     overflow-x: hidden;
   }
 
-  /* SCANLINES */
+  /* SCANLINES EFFECT */
   body::before {
     content: '';
     position: fixed;
@@ -247,7 +247,7 @@
     color: var(--dark);
   }
 
-  /* SERVICES */
+  /* SERVICES CARDS */
   .services-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -691,7 +691,7 @@
 <body>
 
 <header style="position: relative;">
-  <a href="index.html" style="position: absolute; top: 15px; right: 20px; color: var(--magenta); border: 1px solid var(--magenta); padding: 5px 12px; font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 1px; text-decoration: none; transition: all 0.2s; box-shadow: 0 0 8px rgba(255,45,120,0.2);">
+  <a href="index.html" style="position: absolute; top: 15px; right: 20px; color: var(--magenta); border: 1px solid var(--magenta); padding: 5px 12px; font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 1px; text-decoration: none; transition: all 0.2s; box-shadow: 0 0 8px rgba(255,45,120,0.2); z-index: 10;">
     FR — FRANÇAIS
   </a>
 
@@ -809,7 +809,7 @@
       <span class="total-label">Estimated Subtotal</span>
       <span class="total-amount" id="subtotal-display">0$</span>
     </div>
-    <p class="error-msg" id="err-service">Please select at least one service.</p>
+    <p class="error-msg" id="err-service">Please select at least one main service (Exterior Wash or Interior Cleaning).</p>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(1)">← Back</button>
       <button class="btn btn-primary" onclick="goStep(3)">Continue →</button>
@@ -970,7 +970,6 @@
     { h: '16:00', ampm: 'PM' }, { h: '17:00', ampm: 'PM' }, { h: '18:00', ampm: 'PM' }, { h: '19:00', ampm: 'PM' }
   ];
 
-  // Translated constants to fit English template
   const MONTHS_FR = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const DAYS_FR = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
@@ -1164,10 +1163,16 @@
       document.getElementById('err-vehicle').classList.add('show');
       return;
     }
-    if (n === 3 && state.services.length === 0) {
-      document.getElementById('err-service').classList.add('show');
-      return;
+    
+    // MANDATORY BASE SERVICES CHECK: Locks step 2 if no core wash is selected
+    if (n === 3) {
+      const aServiceDeBase = state.services.some(s => s.name === "Exterior Wash" || s.name === "Interior Cleaning");
+      if (!aServiceDeBase) {
+        document.getElementById('err-service').classList.add('show');
+        return;
+      }
     }
+    
     if (n === 4 && (!state.date || !state.time)) {
       document.getElementById('err-date').classList.add('show');
       return;
@@ -1197,10 +1202,9 @@
     const errForm = document.getElementById('err-form');
 
     if (!prenom || !nom || !telephone || !email || !adresse) {
-      errForm.classList.add('show');
+      document.getElementById('err-form').classList.add('show');
       return;
     }
-    errForm.setTimeout = window.removeEventListener;
     errForm.classList.remove('show');
 
     document.getElementById('agree-checkbox').checked = false;
