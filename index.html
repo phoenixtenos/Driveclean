@@ -28,7 +28,6 @@
     overflow-x: hidden;
   }
 
-  /* SCANLINES EFFECTS */
   body::before {
     content: '';
     position: fixed;
@@ -38,7 +37,7 @@
     z-index: 999;
   }
 
-  /* POP-UP SÉLECTEUR DE LANGUE INITIAL (SPLASH SCREEN) */
+  /* POP-UP SÉLECTEUR DE LANGUE INITIAL */
   .lang-popup-overlay {
     position: fixed;
     inset: 0;
@@ -102,24 +101,10 @@
     text-decoration: none;
     display: inline-block;
   }
-  .lang-btn-fr {
-    background: var(--cyan);
-    border-color: var(--cyan);
-    color: var(--dark);
-  }
-  .lang-btn-fr:hover {
-    background: var(--white);
-    border-color: var(--white);
-  }
-  .lang-btn-en {
-    background: transparent;
-    border-color: var(--magenta);
-    color: var(--white);
-  }
-  .lang-btn-en:hover {
-    background: var(--magenta);
-    color: var(--white);
-  }
+  .lang-btn-fr { background: var(--cyan); border-color: var(--cyan); color: var(--dark); }
+  .lang-btn-fr:hover { background: var(--white); border-color: var(--white); }
+  .lang-btn-en { background: transparent; border-color: var(--magenta); color: var(--white); }
+  .lang-btn-en:hover { background: var(--magenta); color: var(--white); }
 
   /* HEADER */
   header {
@@ -219,10 +204,7 @@
     margin-bottom: 2px;
     transition: color 0.2s;
   }
-  .step-tab.active {
-    color: var(--white);
-    background: rgba(0,200,255,0.08);
-  }
+  .step-tab.active { color: var(--white); background: rgba(0,200,255,0.08); }
   .step-tab.active .snum { color: var(--cyan); }
   .step-tab.active::after {
     content: '';
@@ -254,29 +236,11 @@
     position: relative;
     display: inline-block;
   }
-  .section-title::after {
-    content: '';
-    display: block;
-    height: 3px;
-    background: var(--magenta);
-    margin-top: 4px;
-  }
-  .section-sub {
-    color: var(--gray);
-    font-size: 14px;
-    letter-spacing: 1px;
-    margin-bottom: 28px;
-    margin-top: 8px;
-  }
+  .section-title::after { content: ''; display: block; height: 3px; background: var(--magenta); margin-top: 4px; }
+  .section-sub { color: var(--gray); font-size: 14px; letter-spacing: 1px; margin-bottom: 28px; margin-top: 8px; }
 
   /* VEHICLE CARDS */
-  .vehicle-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-    margin-bottom: 30px;
-  }
-
+  .vehicle-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 30px; }
   .v-card {
     background: var(--card);
     border: 2px solid rgba(255,255,255,0.1);
@@ -297,21 +261,9 @@
   .v-card.selected { border-color: var(--cyan); background: rgba(0,200,255,0.06); }
   .v-card.selected::before { background: var(--cyan); }
   .v-card .vicon { font-size: 30px; margin-bottom: 8px; line-height: 1; }
-  .v-card .vname {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    letter-spacing: 2px;
-    color: var(--white);
-  }
+  .v-card .vname { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--white); }
   .v-card .vdesc { font-size: 12px; color: var(--gray); margin-top: 3px; letter-spacing: 0.5px; }
-  .v-card .vprice {
-    position: absolute;
-    top: 16px; right: 16px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    color: var(--cyan);
-    letter-spacing: 1px;
-  }
+  .v-card .vprice { position: absolute; top: 16px; right: 16px; font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--cyan); letter-spacing: 1px; }
   .v-card.selected .vprice { color: var(--yellow); }
   .checkmark {
     position: absolute;
@@ -323,20 +275,10 @@
     color: transparent;
     transition: all 0.2s;
   }
-  .v-card.selected .checkmark {
-    background: var(--cyan);
-    border-color: var(--cyan);
-    color: var(--dark);
-  }
+  .v-card.selected .checkmark { background: var(--cyan); border-color: var(--cyan); color: var(--dark); }
 
   /* SERVICES CARDS */
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-    margin-bottom: 28px;
-  }
-
+  .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 28px; }
   .svc-card {
     background: var(--card);
     border: 2px solid rgba(255,255,255,0.1);
@@ -345,33 +287,14 @@
     position: relative;
     transition: border-color 0.2s, background 0.2s;
   }
-  .svc-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
-    background: var(--gray);
-    transition: background 0.2s;
-  }
+  .svc-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--gray); transition: background 0.2s; }
   .svc-card:hover { border-color: rgba(255,45,120,0.4); }
   .svc-card.selected { border-color: var(--magenta); background: rgba(255,45,120,0.06); }
   .svc-card.selected::before { background: var(--magenta); }
   .svc-card .sicon { font-size: 26px; margin-bottom: 6px; }
-  .svc-card .sname {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 19px;
-    letter-spacing: 2px;
-    color: var(--white);
-  }
+  .svc-card .sname { font-family: 'Bebas Neue', sans-serif; font-size: 19px; letter-spacing: 2px; color: var(--white); }
   .svc-card .sdesc { font-size: 12px; color: var(--gray); margin-top: 3px; }
-  .svc-card .sprice {
-    position: absolute;
-    top: 14px; right: 14px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    color: var(--magenta);
-    letter-spacing: 1px;
-  }
+  .svc-card .sprice { position: absolute; top: 14px; right: 14px; font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--magenta); letter-spacing: 1px; }
   .svc-card .checkmark { border-color: var(--gray); }
   .svc-card.selected .checkmark { background: var(--magenta); border-color: var(--magenta); color: var(--dark); }
 
@@ -386,33 +309,12 @@
     align-items: center;
     margin-bottom: 28px;
   }
-  .total-label {
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gray);
-  }
-  .total-amount {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    color: var(--yellow);
-    letter-spacing: 2px;
-  }
+  .total-label { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); }
+  .total-amount { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--yellow); letter-spacing: 2px; }
 
   /* CALENDAR */
-  .calendar-wrap {
-    background: var(--card);
-    border: 2px solid rgba(255,255,255,0.1);
-    padding: 24px;
-    margin-bottom: 28px;
-    max-width: 420px;
-  }
-  .cal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
+  .calendar-wrap { background: var(--card); border: 2px solid rgba(255,255,255,0.1); padding: 24px; margin-bottom: 28px; max-width: 420px; }
+  .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
   .cal-nav {
     background: var(--mid);
     border: 2px solid rgba(255,255,255,0.15);
@@ -425,26 +327,9 @@
     transition: background 0.2s;
   }
   .cal-nav:hover { background: var(--cyan); color: var(--dark); }
-  .cal-month {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 3px;
-    color: var(--white);
-    text-align: center;
-  }
-  .cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-  }
-  .cal-day-name {
-    text-align: center;
-    font-size: 11px;
-    letter-spacing: 1px;
-    color: var(--gray);
-    padding: 4px 0 8px;
-    font-weight: 600;
-  }
+  .cal-month { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--white); text-align: center; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .cal-day-name { text-align: center; font-size: 11px; letter-spacing: 1px; color: var(--gray); padding: 4px 0 8px; font-weight: 600; }
   .cal-day {
     aspect-ratio: 1;
     display: flex; align-items: center; justify-content: center;
@@ -462,10 +347,7 @@
   .cal-day.selected { background: var(--cyan); color: var(--dark); border-color: var(--cyan); font-weight: 700; }
 
   /* TIME SLOTS */
-  .time-section {
-    margin-top: 20px;
-    max-width: 420px;
-  }
+  .time-section { margin-top: 20px; max-width: 420px; }
   .time-section-title {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 16px;
@@ -476,17 +358,8 @@
     align-items: center;
     gap: 10px;
   }
-  .time-section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(255,45,120,0.3);
-  }
-  .time-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-  }
+  .time-section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,45,120,0.3); }
+  .time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
   .time-slot {
     background: var(--card);
     border: 2px solid rgba(255,255,255,0.1);
@@ -500,47 +373,19 @@
     transition: all 0.15s;
     position: relative;
   }
-  .time-slot:hover:not(.unavailable) {
-    border-color: var(--magenta);
-    color: var(--magenta);
-  }
-  .time-slot.selected {
-    background: var(--magenta);
-    border-color: var(--magenta);
-    color: var(--white);
-  }
-  .time-slot.unavailable {
-    color: rgba(255,255,255,0.18);
-    cursor: default;
-    border-color: transparent;
-    text-decoration: line-through;
-  }
-  .time-slot .ampm {
-    display: block;
-    font-size: 10px;
-    letter-spacing: 2px;
-    opacity: 0.7;
-    margin-top: 1px;
-  }
+  .time-slot:hover:not(.unavailable) { border-color: var(--magenta); color: var(--magenta); }
+  .time-slot.selected { background: var(--magenta); border-color: var(--magenta); color: var(--white); }
+  .time-slot.unavailable { color: rgba(255,255,255,0.18); cursor: default; border-color: transparent; text-decoration: line-through; }
+  .time-slot .ampm { display: block; font-size: 10px; letter-spacing: 2px; opacity: 0.7; margin-top: 1px; }
   .time-slot.selected .ampm { opacity: 1; }
 
   /* FORM */
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
   @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
   .form-full { grid-column: 1 / -1; }
 
   .field-wrap { display: flex; flex-direction: column; gap: 6px; }
-  .field-label {
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gray);
-  }
+  .field-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); }
   .field-input {
     background: var(--card);
     border: 2px solid rgba(255,255,255,0.1);
@@ -553,52 +398,20 @@
     transition: border-color 0.2s;
     border-left: 4px solid var(--gray);
   }
-  .field-input:focus {
-    border-color: var(--cyan);
-    border-left-color: var(--cyan);
-  }
+  .field-input:focus { border-color: var(--cyan); border-left-color: var(--cyan); }
   .field-input::placeholder { color: rgba(255,255,255,0.2); }
 
   /* RECAP */
-  .recap-box {
-    background: var(--card);
-    border: 2px solid rgba(255,255,255,0.1);
-    border-top: 4px solid var(--cyan);
-    padding: 20px;
-    margin-bottom: 24px;
-  }
-  .recap-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 16px;
-    letter-spacing: 3px;
-    color: var(--cyan);
-    margin-bottom: 14px;
-  }
-  .recap-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    font-size: 14px;
-    letter-spacing: 0.5px;
-  }
+  .recap-box { background: var(--card); border: 2px solid rgba(255,255,255,0.1); border-top: 4px solid var(--cyan); padding: 20px; margin-bottom: 24px; }
+  .recap-title { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 3px; color: var(--cyan); margin-bottom: 14px; }
+  .recap-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 14px; letter-spacing: 0.5px; }
   .recap-row:last-child { border-bottom: none; }
   .recap-key { color: var(--gray); }
   .recap-val { color: var(--white); font-weight: 600; }
   .recap-total .recap-key { color: var(--yellow); font-weight: 700; font-size: 15px; }
-  .recap-total .recap-val {
-    color: var(--yellow);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 24px;
-    letter-spacing: 2px;
-  }
+  .recap-total .recap-val { color: var(--yellow); font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; }
 
-  /* BUTTONS */
-  .btn-row {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
+  .btn-row { display: flex; gap: 12px; align-items: center; }
   .btn {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 18px;
@@ -609,40 +422,17 @@
     transition: all 0.2s;
     display: inline-flex; align-items: center; gap: 8px;
   }
-  .btn-primary {
-    background: var(--cyan);
-    border-color: var(--cyan);
-    color: var(--dark);
-  }
+  .btn-primary { background: var(--cyan); border-color: var(--cyan); color: var(--dark); }
   .btn-primary:hover { background: var(--white); border-color: var(--white); }
-  .btn-secondary {
-    background: transparent;
-    border-color: rgba(255,255,255,0.2);
-    color: var(--gray);
-  }
+  .btn-secondary { background: transparent; border-color: rgba(255,255,255,0.2); color: var(--gray); }
   .btn-secondary:hover { border-color: var(--white); color: var(--white); }
-  .btn-confirm {
-    background: var(--magenta);
-    border-color: var(--magenta);
-    color: var(--white);
-  }
+  .btn-confirm { background: var(--magenta); border-color: var(--magenta); color: var(--white); }
   .btn-confirm:hover { background: #FF005A; border-color: #FF005A; }
 
-  /* ERROR */
-  .error-msg {
-    color: var(--magenta);
-    font-size: 13px;
-    letter-spacing: 1px;
-    margin-top: 10px;
-    display: none;
-  }
+  .error-msg { color: var(--magenta); font-size: 13px; letter-spacing: 1px; margin-top: 10px; display: none; }
   .error-msg.show { display: block; }
 
-  /* SUCCESS */
-  #step-success {
-    text-align: center;
-    padding: 60px 20px;
-  }
+  #step-success { text-align: center; padding: 60px 20px; }
   .success-icon {
     width: 80px; height: 80px;
     border: 3px solid var(--cyan);
@@ -653,20 +443,8 @@
     animation: popIn 0.5s ease;
   }
   @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-  .success-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 42px;
-    letter-spacing: 4px;
-    color: var(--cyan);
-    margin-bottom: 12px;
-  }
-  .success-sub {
-    color: var(--gray);
-    font-size: 15px;
-    letter-spacing: 1px;
-    line-height: 1.7;
-    margin-bottom: 30px;
-  }
+  .success-title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 4px; color: var(--cyan); margin-bottom: 12px; }
+  .success-sub { color: var(--gray); font-size: 15px; letter-spacing: 1px; line-height: 1.7; margin-bottom: 30px; }
   .success-detail {
     display: inline-block;
     background: var(--card);
@@ -681,14 +459,8 @@
     margin-bottom: 32px;
   }
 
-  /* DECO STRIPE */
-  .deco-stripe {
-    height: 4px;
-    background: repeating-linear-gradient(90deg, var(--magenta) 0px, var(--magenta) 14px, var(--cyan) 14px, var(--cyan) 28px);
-    margin-bottom: 28px;
-  }
+  .deco-stripe { height: 4px; background: repeating-linear-gradient(90deg, var(--magenta) 0px, var(--magenta) 14px, var(--cyan) 14px, var(--cyan) 28px); margin-bottom: 28px; }
 
-  /* TERMS AND CONDITIONS MODAL */
   .modal-overlay {
     position: fixed;
     inset: 0;
@@ -702,10 +474,7 @@
     pointer-events: none;
     transition: opacity 0.3s ease;
   }
-  .modal-overlay.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .modal-overlay.show { opacity: 1; pointer-events: auto; }
   .modal-box {
     background: var(--dark);
     border: 2px solid var(--cyan);
@@ -717,58 +486,19 @@
     transform: translateY(-20px);
     transition: transform 0.3s ease;
   }
-  .modal-overlay.show .modal-box {
-    transform: translateY(0);
-  }
-  .modal-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 24px;
-    color: var(--cyan);
-    letter-spacing: 2px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgba(0, 200, 255, 0.2);
-    padding-bottom: 8px;
-  }
-  .modal-content {
-    font-size: 13px;
-    color: var(--gray);
-    line-height: 1.6;
-    max-height: 250px;
-    overflow-y: auto;
-    margin-bottom: 20px;
-    padding-right: 10px;
-    text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  }
-  .modal-content h4 {
-    color: var(--white);
-    font-size: 14px;
-    margin: 12px 0 4px 0;
-  }
+  .modal-overlay.show .modal-box { transform: translateY(0); }
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--cyan); letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid rgba(0, 200, 255, 0.2); padding-bottom: 8px; }
+  .modal-content { font-size: 13px; color: var(--gray); line-height: 1.6; max-height: 250px; overflow-y: auto; margin-bottom: 20px; padding-right: 10px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+  .modal-content h4 { color: var(--white); font-size: 14px; margin: 12px 0 4px 0; }
   .modal-content::-webkit-scrollbar { width: 4px; }
   .modal-content::-webkit-scrollbar-track { background: var(--darker); }
   .modal-content::-webkit-scrollbar-thumb { background: var(--cyan); }
 
-  .checkbox-wrap {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 20px;
-    text-align: left;
-    cursor: pointer;
-    user-select: none;
-  }
-  .checkbox-wrap input {
-    margin-top: 3px;
-    accent-color: var(--cyan);
-  }
-  .checkbox-label {
-    font-size: 13px;
-    color: var(--white);
-    font-weight: 600;
-  }
+  .checkbox-wrap { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 20px; text-align: left; cursor: pointer; user-select: none; }
+  .checkbox-wrap input { margin-top: 3px; accent-color: var(--cyan); }
+  .checkbox-label { font-size: 13px; color: var(--white); font-weight: 600; }
 
-  /* MEDIA QUERIES APPAREILS MOBILES (COMPACTAGE DE L'ÉCRAN) */
+  /* CODE DE COMPACTAGE MOBILE ET COMPRESSION GRAPHIQUE */
   @media (max-width: 600px) {
     header .header-inner { padding: 12px 10px 8px; gap: 10px; }
     header .logo-block { padding: 4px 12px; }
@@ -789,7 +519,7 @@
     .v-card, .svc-card { padding: 10px 8px; min-height: 90px; }
     .v-card .vicon, .svc-card .sicon { font-size: 20px; margin-bottom: 2px; }
     .v-card .vname, .svc-card .sname { font-size: 14px; letter-spacing: 0.5px; line-height: 1.1; }
-    .v-card .vdesc, .svc-card .sdesc { display: none; } /* On cache les longues descriptions pour gagner de la place */
+    .v-card .vdesc, .svc-card .sdesc { display: none; }
     .v-card .vprice, .svc-card .sprice { position: static; display: block; font-size: 14px; margin-top: 4px; }
     .checkmark { bottom: 6px; right: 6px; width: 14px; height: 14px; font-size: 8px; }
     
@@ -823,8 +553,9 @@
 </div>
 
 <header style="position: relative;">
-  <a href="index-en.html">EN — ENGLISH</a>
-
+  <a href="index-en.html" style="position: absolute; top: 15px; right: 20px; color: var(--cyan); border: 1px solid var(--cyan); padding: 5px 12px; font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 1px; text-decoration: none; transition: all 0.2s; box-shadow: 0 0 8px rgba(0,200,255,0.2); z-index: 10;">
+    EN — ENGLISH
+  </a>
   <div class="header-inner">
     <div class="logo-block">
       <div class="logo-drive">DRIVE</div>
@@ -839,18 +570,10 @@
 
 <nav class="steps-nav">
   <div class="steps-inner">
-    <div class="step-tab active" id="tab-1">
-      <span class="snum">01</span>VÉHICULE
-    </div>
-    <div class="step-tab" id="tab-2">
-      <span class="snum">02</span>SERVICES
-    </div>
-    <div class="step-tab" id="tab-3">
-      <span class="snum">03</span>DATE
-    </div>
-    <div class="step-tab" id="tab-4">
-      <span class="snum">04</span>CONFIRM.
-    </div>
+    <div class="step-tab active" id="tab-1"><span class="snum">01</span>VÉHICULE</div>
+    <div class="step-tab" id="tab-2"><span class="snum">02</span>SERVICES</div>
+    <div class="step-tab" id="tab-3"><span class="snum">03</span>DATE</div>
+    <div class="step-tab" id="tab-4"><span class="snum">04</span>CONFIRM.</div>
   </div>
 </nav>
 
@@ -862,32 +585,16 @@
     <p class="section-sub">Le type de véhicule détermine le tarif de base.</p>
     <div class="vehicle-grid">
       <div class="v-card" data-vehicle="Compacte / Berline" data-price="0" onclick="selectVehicle(this)">
-        <div class="vicon">🚗</div>
-        <div class="vname">Compacte / Berline</div>
-        <div class="vdesc">Citadine, coupé, berline standard</div>
-        <div class="vprice">+0$</div>
-        <div class="checkmark">✓</div>
+        <div class="vicon">🚗</div><div class="vname">Compacte / Berline</div><div class="vdesc">Citadine, coupé, berline standard</div><div class="vprice">+0$</div><div class="checkmark">✓</div>
       </div>
       <div class="v-card" data-vehicle="VUS / 4x4" data-price="10" onclick="selectVehicle(this)">
-        <div class="vicon">🚙</div>
-        <div class="vname">VUS / 4x4</div>
-        <div class="vdesc">Tout-terrain, crossover, pickup</div>
-        <div class="vprice">+10$</div>
-        <div class="checkmark">✓</div>
+        <div class="vicon">🚙</div><div class="vname">VUS / 4x4</div><div class="vdesc">Tout-terrain, crossover, pickup</div><div class="vprice">+10$</div><div class="checkmark">✓</div>
       </div>
       <div class="v-card" data-vehicle="Minivan / Fourgonnette" data-price="20" onclick="selectVehicle(this)">
-        <div class="vicon">🚐</div>
-        <div class="vname">Minivan / Van</div>
-        <div class="vdesc">Monospace, véhicule familial de loisir</div>
-        <div class="vprice">+20$</div>
-        <div class="checkmark">✓</div>
+        <div class="vicon">🚐</div><div class="vname">Minivan / Van</div><div class="vdesc">Monospace, véhicule familial de loisir</div><div class="vprice">+20$</div><div class="checkmark">✓</div>
       </div>
       <div class="v-card" data-vehicle="Commercial / Grand Véhicule" data-price="30" onclick="selectVehicle(this)">
-        <div class="vicon">🚛</div>
-        <div class="vname">Commercial / Grand</div>
-        <div class="vdesc">Camionnette lourde, véhicule utilitaire</div>
-        <div class="vprice">+30$</div>
-        <div class="checkmark">✓</div>
+        <div class="vicon">🚛</div><div class="vname">Commercial / Grand</div><div class="vdesc">Camionnette lourde, véhicule utilitaire</div><div class="vprice">+30$</div><div class="checkmark">✓</div>
       </div>
     </div>
     <div style="margin-bottom: 15px;">
@@ -896,7 +603,7 @@
       </button>
     </div>
     <p class="error-msg" id="err-vehicle">Veuillez sélectionner un type de véhicule.</p>
-    <div class="btn-row">
+    <div class="btn-row" id="btn-row-1">
       <button class="btn btn-primary" onclick="goStep(2)">Continuer →</button>
     </div>
   </div>
@@ -907,35 +614,19 @@
     <p class="section-sub">Sélectionnez vos options de nettoyage.</p>
     <div class="services-grid">
       <div class="svc-card" data-service="Lavage Extérieur" data-price="45" onclick="toggleService(this)">
-        <div class="sicon">✨</div>
-        <div class="sname">Lavage Extérieur</div>
-        <div class="sdesc">Carrosserie, vitres, jantes & pneus</div>
-        <div class="sprice">+45$</div>
-        <div class="checkmark">✓</div>
+        <div class="sicon">✨</div><div class="sname">Lavage Extérieur</div><div class="sdesc">Carrosserie, vitres, jantes & pneus</div><div class="sprice">+45$</div><div class="checkmark">✓</div>
       </div>
       <div class="svc-card" data-service="Nettoyage Intérieur" data-price="30" onclick="toggleService(this)">
-        <div class="sicon">🪑</div>
-        <div class="sname">Nettoyage Intérieur</div>
-        <div class="sdesc">Aspirateur, tableau de bord, vitres</div>
-        <div class="sprice">+30$</div>
-        <div class="checkmark">✓</div>
+        <div class="sicon">🪑</div><div class="sname">Nettoyage Intérieur</div><div class="sdesc">Aspirateur, tableau de bord, vitres</div><div class="sprice">+30$</div><div class="checkmark">✓</div>
       </div>
       <div class="svc-card" data-service="Protection Pneus Armorall" data-price="10" onclick="toggleService(this)">
-        <div class="sicon">🔵</div>
-        <div class="sname">Armorall Pneus</div>
-        <div class="sdesc">Fini brillant et protecteur longue durée</div>
-        <div class="sprice">+10$</div>
-        <div class="checkmark">✓</div>
+        <div class="sicon">🔵</div><div class="sname">Armorall Pneus</div><div class="sdesc">Fini brillant et protecteur longue durée</div><div class="sprice">+10$</div><div class="checkmark">✓</div>
       </div>
       <div class="svc-card" data-service="Nettoyage du Coffre" data-price="10" onclick="toggleService(this)">
-        <div class="sicon">📦</div>
-        <div class="sname">Nettoyage Coffre</div>
-        <div class="sdesc">Aspiration complète et assainissement</div>
-        <div class="sprice">+10$</div>
-        <div class="checkmark">✓</div>
+        <div class="sicon">📦</div><div class="sname">Nettoyage Coffre</div><div class="sdesc">Aspiration complète et assainissement</div><div class="sprice">+10$</div><div class="checkmark">✓</div>
       </div>
     </div>
-    <div class="total-bar">
+    <div class="total-bar" id="total-bar-element">
       <span class="total-label">Sous-total</span>
       <span class="total-amount" id="subtotal-display">0$</span>
     </div>
@@ -950,7 +641,7 @@
     <div class="deco-stripe"></div>
     <div class="section-title">Date &amp; Heure</div>
     <p class="section-sub">Sélectionnez votre créneau.</p>
-    <div class="calendar-wrap">
+    <div class="calendar-wrap" id="calendar-anchor">
       <div class="cal-header">
         <div class="cal-nav" onclick="prevMonth()">‹</div>
         <div class="cal-month" id="cal-month-label"></div>
@@ -960,12 +651,12 @@
     </div>
 
     <div class="time-section" id="time-section" style="display:none">
-      <div class="time-section-title">— PLAGE HORAIRE —</div>
+      <div class="time-section-title" id="time-anchor">— PLAGE HORAIRE —</div>
       <div class="time-grid" id="time-grid"></div>
     </div>
 
     <p class="error-msg" id="err-date">Veuillez sélectionner une date et une heure.</p>
-    <div class="btn-row" style="flex-direction: column; gap: 8px; margin-top: 15px;">
+    <div class="btn-row" id="btn-row-3" style="flex-direction: column; gap: 8px; margin-top: 15px;">
       <button class="btn btn-primary" onclick="goStep(4)">Continuer →</button>
       <button class="btn btn-secondary" onclick="goStep(2)">← Retour</button>
     </div>
@@ -984,7 +675,7 @@
       <div class="recap-row recap-total" style="padding: 6px 0;"><span class="recap-key">TOTAL</span><span class="recap-val" id="r-total" style="font-size: 18px;">0$</span></div>
     </div>
 
-    <div class="form-grid" style="gap: 10px; margin-bottom: 15px;">
+    <div class="form-grid" id="form-fields-anchor" style="gap: 10px; margin-bottom: 15px;">
       <div class="field-wrap"><label class="field-label">Prénom</label><input class="field-input" type="text" id="f-prenom" style="padding: 8px;" placeholder="Jean"></div>
       <div class="field-wrap"><label class="field-label">Nom</label><input class="field-input" type="text" id="f-nom" style="padding: 8px;" placeholder="Tremblay"></div>
       <div class="field-wrap"><label class="field-label">Téléphone</label><input class="field-input" type="tel" id="f-tel" style="padding: 8px;" placeholder="514-555-0199"></div>
@@ -1034,16 +725,7 @@
 </footer>
 
 <script>
-  let state = {
-    vehicle: null,
-    vehiclePrice: 0,
-    services: [],
-    servicesTotal: 0,
-    date: null,
-    time: null,
-    calYear: new Date().getFullYear(),
-    calMonth: new Date().getMonth()
-  };
+  let state = { vehicle: null, vehiclePrice: 0, services: [], servicesTotal: 0, date: null, time: null, calYear: new Date().getFullYear(), calMonth: new Date().getMonth() };
 
   const START_MONTH = new Date().getMonth();
   const START_YEAR = new Date().getFullYear();
@@ -1061,9 +743,7 @@
   const SUPABASE_URL = 'https://ezhljxnrlinvawdbjioz.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6aGxqeG5ybGludmF3ZGJqaW96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MDMwMDUsImV4cCI6MjA5NDM3OTAwNX0.tFmlEhpt5rIDxG5F7AmUOhHSjwb3bNlrNUrx9niGBAw';
 
-  function closeLangPopup() {
-    document.getElementById('initial-lang-popup').classList.add('hide');
-  }
+  function closeLangPopup() { document.getElementById('initial-lang-popup').classList.add('hide'); }
 
   function selectVehicle(el) {
     document.querySelectorAll('.v-card').forEach(c => c.classList.remove('selected'));
@@ -1072,6 +752,9 @@
     state.vehiclePrice = parseInt(el.dataset.price);
     updateSubtotal();
     document.getElementById('err-vehicle').classList.remove('show');
+    
+    // FOCUS FLOW : Déplace l'écran vers le bouton continuer après le choix du véhicule
+    document.getElementById('btn-row-1').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   function toggleService(el) {
@@ -1085,6 +768,9 @@
     }
     updateSubtotal();
     document.getElementById('err-service').classList.remove('show');
+    
+    // FOCUS FLOW : Aligne sur la barre de prix
+    document.getElementById('total-bar-element').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   function updateSubtotal() {
@@ -1101,29 +787,21 @@
 
     DAYS_FR.forEach(d => {
       const el = document.createElement('div');
-      el.className = 'cal-day-name';
-      el.textContent = d;
-      grid.appendChild(el);
+      el.className = 'cal-day-name'; el.textContent = d; grid.appendChild(el);
     });
 
-    const today = new Date();
-    today.setHours(0,0,0,0);
+    const today = new Date(); today.setHours(0,0,0,0);
     const firstDay = new Date(state.calYear, state.calMonth, 1).getDay();
     const daysInMonth = new Date(state.calYear, state.calMonth + 1, 0).getDate();
 
     for (let i = 0; i < firstDay; i++) {
-      const el = document.createElement('div');
-      el.className = 'cal-day empty';
-      grid.appendChild(el);
+      const el = document.createElement('div'); el.className = 'cal-day empty'; grid.appendChild(el);
     }
 
     for (let d = 1; d <= daysInMonth; d++) {
       const el = document.createElement('div');
-      const date = new Date(state.calYear, state.calMonth, d);
-      date.setHours(0,0,0,0);
-      el.className = 'cal-day';
-      el.textContent = d;
-      
+      const date = new Date(state.calYear, state.calMonth, d); date.setHours(0,0,0,0);
+      el.className = 'cal-day'; el.textContent = d;
       if (date < today || date > MAX_LIMIT_DATE) {
         el.classList.add('past');
       } else {
@@ -1139,60 +817,45 @@
   async function selectDate(day, dateStr, el) {
     document.querySelectorAll('.cal-day').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
-    state.date = dateStr;
-    state.time = null;
+    state.date = dateStr; state.time = null;
     document.getElementById('err-date').classList.remove('show');
     
     const grid = document.getElementById('time-grid');
     grid.innerHTML = '<div style="grid-column: 1/-1; color: var(--gray); font-size: 13px;">Analyse...</div>';
-    
-    const ts = document.getElementById('time-section');
-    ts.style.display = 'block';
+    const ts = document.getElementById('time-section'); ts.style.display = 'block';
+
+    // FOCUS FLOW : Glisse vers les heures dès la sélection du jour
+    setTimeout(() => { document.getElementById('time-anchor').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
 
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/reservations?date_rdv=eq.${dateStr}`, {
         method: 'GET',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json'
-        }
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' }
       });
-
       if (!res.ok) throw new Error('Erreur');
-
       const reservationsExistantes = await res.json();
       const journeeBloquee = reservationsExistantes.some(r => r.heure_rdv === 'JOURNÉE');
 
       if (journeeBloquee) {
-        const toutesLesHeures = TIME_SLOTS.map(slot => slot.h + ' ' + slot.ampm);
-        buildTimeSlots(toutesLesHeures);
+        const toutesLesHeures = TIME_SLOTS.map(slot => slot.h + ' ' + slot.ampm); buildTimeSlots(toutesLesHeures);
       } else {
-        const heuresPrises = reservationsExistantes.map(r => r.heure_rdv);
-        buildTimeSlots(heuresPrises);
+        const heuresPrises = reservationsExistantes.map(r => r.heure_rdv); buildTimeSlots(heuresPrises);
       }
-
     } catch (error) {
-      console.error(error);
       grid.innerHTML = '<div style="grid-column: 1/-1; color: var(--magenta); font-size: 13px;">Erreur réseau.</div>';
     }
   }
 
   function buildTimeSlots(heuresPrises = []) {
-    const grid = document.getElementById('time-grid');
-    grid.innerHTML = '';
-    
+    const grid = document.getElementById('time-grid'); grid.innerHTML = '';
     TIME_SLOTS.forEach((slot) => {
       const el = document.createElement('div');
       const formatHeureBdd = slot.h + ' ' + slot.ampm;
       const estPris = heuresPrises.includes(formatHeureBdd);
-      
       if (estPris) {
-        el.className = 'time-slot unavailable';
-        el.innerHTML = slot.h + '<span class="ampm">' + slot.ampm + '</span>';
+        el.className = 'time-slot unavailable'; el.innerHTML = slot.h + '<span class="ampm">' + slot.ampm + '</span>';
       } else {
-        el.className = 'time-slot';
-        el.innerHTML = slot.h + '<span class="ampm">' + slot.ampm + '</span>';
+        el.className = 'time-slot'; el.innerHTML = slot.h + '<span class="ampm">' + slot.ampm + '</span>';
         el.onclick = () => selectTime(formatHeureBdd, el);
       }
       grid.appendChild(el);
@@ -1204,33 +867,28 @@
     el.classList.add('selected');
     state.time = timeStr;
     document.getElementById('err-date').classList.remove('show');
+    
+    // FOCUS FLOW : Amène au bouton de transition d'étape
+    document.getElementById('btn-row-3').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   function prevMonth() {
     if (state.calYear === START_YEAR && state.calMonth === START_MONTH) return;
-    state.calMonth--;
-    if (state.calMonth < 0) { state.calMonth = 11; state.calYear--; }
-    state.date = null; state.time = null;
-    document.getElementById('time-section').style.display = 'none';
-    buildCalendar();
+    state.calMonth--; if (state.calMonth < 0) { state.calMonth = 11; state.calYear--; }
+    state.date = null; state.time = null; document.getElementById('time-section').style.display = 'none'; buildCalendar();
   }
 
   function nextMonth() {
-    let targetMonth = START_MONTH + 1;
-    let targetYear = START_YEAR;
+    let targetMonth = START_MONTH + 1; let targetYear = START_YEAR;
     if (targetMonth > 11) { targetMonth = 0; targetYear++; }
     if (state.calYear === targetYear && state.calMonth === targetMonth) return;
-    state.calMonth++;
-    if (state.calMonth > 11) { state.calMonth = 0; state.calYear++; }
-    state.date = null; state.time = null;
-    document.getElementById('time-section').style.display = 'none';
-    buildCalendar();
+    state.calMonth++; if (state.calMonth > 11) { state.calMonth = 0; state.calYear++; }
+    state.date = null; state.time = null; document.getElementById('time-section').style.display = 'none'; buildCalendar();
   }
 
   function updateRecap() {
     const total = state.vehiclePrice + state.servicesTotal;
     const listeservices = state.services.map(s => s.name).join(', ');
-
     document.getElementById('r-vehicle').textContent = state.vehicle;
     document.getElementById('r-services').textContent = listeservices || 'Aucun';
     document.getElementById('r-date').textContent = `${state.date} à ${state.time}`;
@@ -1238,23 +896,12 @@
   }
 
   function goStep(n) {
-    if (n === 2 && !state.vehicle) {
-      document.getElementById('err-vehicle').classList.add('show');
-      return;
-    }
-    
+    if (n === 2 && !state.vehicle) { document.getElementById('err-vehicle').classList.add('show'); return; }
     if (n === 3) {
       const aServiceDeBase = state.services.some(s => s.name === "Lavage Extérieur" || s.name === "Nettoyage Intérieur");
-      if (!aServiceDeBase) {
-        document.getElementById('err-service').classList.add('show');
-        return;
-      }
+      if (!aServiceDeBase) { document.getElementById('err-service').classList.add('show'); return; }
     }
-    
-    if (n === 4 && (!state.date || !state.time)) {
-      document.getElementById('err-date').classList.add('show');
-      return;
-    }
+    if (n === 4 && (!state.date || !state.time)) { document.getElementById('err-date').classList.add('show'); return; }
 
     if (n === 4) updateRecap();
 
@@ -1264,9 +911,15 @@
     document.getElementById(`step-${n}`).classList.add('active');
     document.getElementById(`tab-${n}`).classList.add('active');
 
-    for (let i = 1; i < n; i++) {
-      document.getElementById(`tab-${i}`).classList.add('done');
-    }
+    for (let i = 1; i < n; i++) document.getElementById(`tab-${i}`).classList.add('done');
+
+    // FOCUS FLOW INTER-ÉTAPES : Remonte l'écran tout en haut au changement de section
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (n === 3) buildCalendar();
+    
+    // FOCUS FLOW FORMULAIRE : Aligne le début des inputs de l'étape 4
+    if (n === 4) { setTimeout(() => { document.getElementById('form-fields-anchor').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 300); }
   }
 
   function openTermsModal() {
@@ -1275,35 +928,19 @@
     const telephone = document.getElementById('f-tel').value.trim();
     const email = document.getElementById('f-email').value.trim();
     const adresse = document.getElementById('f-adresse').value.trim();
-    const errForm = document.getElementById('err-form');
-
-    if (!prenom || !nom || !telephone || !email || !adresse) {
-      document.getElementById('err-form').classList.add('show');
-      return;
-    }
-    errForm.classList.remove('show');
-
-    document.getElementById('agree-checkbox').checked = false;
-    toggleConfirmButton();
+    if (!prenom || !nom || !telephone || !email || !adresse) { document.getElementById('err-form').classList.add('show'); return; }
+    document.getElementById('err-form').classList.remove('show');
+    document.getElementById('agree-checkbox').checked = false; toggleConfirmButton();
     document.getElementById('terms-modal').classList.add('show');
   }
 
-  function closeTermsModal() {
-    document.getElementById('terms-modal').classList.remove('show');
-  }
+  function closeTermsModal() { document.getElementById('terms-modal').classList.remove('show'); }
 
   function toggleConfirmButton() {
     const isChecked = document.getElementById('agree-checkbox').checked;
     const btn = document.getElementById('modal-submit-btn');
-    if (isChecked) {
-      btn.disabled = false;
-      btn.style.opacity = '1';
-      btn.style.cursor = 'pointer';
-    } else {
-      btn.disabled = true;
-      btn.style.opacity = '0.5';
-      btn.style.cursor = 'not-allowed';
-    }
+    if (isChecked) { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; }
+    else { btn.disabled = true; btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed'; }
   }
 
   async function processFinalBooking() {
@@ -1315,29 +952,18 @@
     const adresse = document.getElementById('f-adresse').value.trim();
     const total = state.vehiclePrice + state.servicesTotal;
     const servicesText = state.services.map(s => s.name).join(', ');
-
     const payload = { prenom, nom, telephone, email, adresse, vehicule: state.vehicle, services: servicesText, date_rdv: state.date, heure_rdv: state.time, total: total };
 
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/reservations`, {
-        method: 'POST',
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
-        body: JSON.stringify(payload)
+        method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' }, body: JSON.stringify(payload)
       });
-
       if (!res.ok) throw new Error('Erreur');
-
-      document.getElementById('success-detail').innerHTML = `
-        <strong>Client :</strong> ${prenom} ${nom}<br>
-        <strong>Rendez-vous :</strong> ${state.date} — ${state.time}<br>
-        <strong>Lieu :</strong> ${adresse}<br>
-        <strong>Montant :</strong> ${total}$
-      `;
+      document.getElementById('success-detail').innerHTML = `<strong>Client :</strong> ${prenom} ${nom}<br><strong>Rendez-vous :</strong> ${state.date} — ${state.time}<br><strong>Lieu :</strong> ${adresse}<br><strong>Montant :</strong> ${total}$`;
       document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
       document.getElementById('step-success').classList.add('active');
-    } catch (error) {
-      alert("Une erreur est survenue.");
-    }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) { alert("Une erreur est survenue."); }
   }
 
   function resetForm() {
@@ -1346,9 +972,7 @@
     document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
     document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('done', 'active'));
     document.getElementById('f-prenom').value = ''; document.getElementById('f-nom').value = ''; document.getElementById('f-tel').value = ''; document.getElementById('f-email').value = ''; document.getElementById('f-adresse').value = '';
-    updateSubtotal(); buildCalendar();
-    document.getElementById('time-section').style.display = 'none';
-    goStep(1);
+    updateSubtotal(); buildCalendar(); document.getElementById('time-section').style.display = 'none'; goStep(1);
   }
 
   window.onload = function() { buildCalendar(); };
